@@ -1,0 +1,816 @@
+{
+	"info": {
+		"_postman_id": "6eb266fb-9220-4a5e-835f-f1bea3d66dcc",
+		"name": "VEH",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24414357"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "GetAllUsers",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1MjEyM30.InJ0TB4VpS3O62CnKtugOKcXwHORspDtyhIS1gQbhQk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  allUsers {\n    id\n    mongoId\n    email\n    role\n    firstName\n    lastName\n    createdAt\n    updatedAt\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateUser",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1MjEyM30.InJ0TB4VpS3O62CnKtugOKcXwHORspDtyhIS1gQbhQk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  createUser(input: {\n    email: \"test@example.com\"\n    password: \"motdepasse\"\n    role: \"player\"\n    firstName: \"Jean\"\n    lastName: \"Dupont\"\n  }) {\n    user {\n      id\n      email\n      role\n      firstName\n      lastName\n    }\n    success\n    message\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUserById",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1MjEyM30.InJ0TB4VpS3O62CnKtugOKcXwHORspDtyhIS1gQbhQk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  userById(userId: \"688de48f090b9dc997b6c0df\") {\n    id\n    email\n    role\n    firstName\n    lastName\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUserByEmail",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1MjEyM30.InJ0TB4VpS3O62CnKtugOKcXwHORspDtyhIS1gQbhQk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  userByEmail(email: \"test@example.com\") {\n    id\n    email\n    role\n    firstName\n    lastName\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSelfUser",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1MjEyM30.InJ0TB4VpS3O62CnKtugOKcXwHORspDtyhIS1gQbhQk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  me {\n    id\n    mongoId\n    email\n    role\n    firstName\n    lastName\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateUser",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1MjEyM30.InJ0TB4VpS3O62CnKtugOKcXwHORspDtyhIS1gQbhQk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  updateUser(userId: \"688e2ed9215cd23a5b17c4f4\", input: {\n    firstName: \"NouveauNom\"\n    lastName: \"NouveauPrenom\"\n    role: \"admin\"\n  }) {\n    user {\n      id\n      email\n      role\n      firstName\n      lastName\n    }\n    success\n    message\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteUser",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1MjEyM30.InJ0TB4VpS3O62CnKtugOKcXwHORspDtyhIS1gQbhQk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  deleteUser(userId: \"688e2ed9215cd23a5b17c4f4\") {\n    success\n    message\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Assets",
+			"item": [
+				{
+					"name": "CreateAsset",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1MjEyM30.InJ0TB4VpS3O62CnKtugOKcXwHORspDtyhIS1gQbhQk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  createAsset(input: {\n    type: \"image\"\n    name: \"Image de test\"\n    filename: \"test.jpg\"\n    url: \"https://cdn.example.com/test.jpg\"\n    fileSize: 123456\n    mimeType: \"image/jpeg\"\n    metadata: \"{\\\"width\\\": 800, \\\"height\\\": 600}\"\n    isPublic: true\n  }) {\n    asset {\n      id\n      name\n      type\n      url\n      isPublic\n      fileSizeMb\n      fileExtension\n      dimensions\n      duration\n    }\n    success\n    message\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateAsset",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NTc3M30.gv18MtPKpB-vSwEKr7mKLUEn8bIlXQxJ2nhbM5pi4N8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  updateAsset(assetId: \"688e3c25d92c134c4f9e8327\", input: {\n    name: \"Nom modifié\"\n    url: \"https://cdn.example.com/nouveau.jpg\"\n    metadata: \"{\\\"width\\\": 1024, \\\"height\\\": 768}\"\n    isPublic: false\n  }) {\n    asset {\n      id\n      name\n      url\n      isPublic\n    }\n    success\n    message\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteAsset",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NTc3M30.gv18MtPKpB-vSwEKr7mKLUEn8bIlXQxJ2nhbM5pi4N8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  deleteAsset(assetId: \"688e3c25d92c134c4f9e8327\") {\n    success\n    message\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllAssets",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NTc3M30.gv18MtPKpB-vSwEKr7mKLUEn8bIlXQxJ2nhbM5pi4N8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  allAssets {\n    id\n    mongoId\n    name\n    type\n    url\n    isPublic\n    uploadedBy {\n      id\n      email\n    }\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAssetById",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NTc3M30.gv18MtPKpB-vSwEKr7mKLUEn8bIlXQxJ2nhbM5pi4N8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  assetById(assetId: \"688de490090b9dc997b6c0e1\") {\n    id\n    mongoId\n    name\n    type\n    url\n    isPublic\n    metadata\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSelfAsset",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NTc3M30.gv18MtPKpB-vSwEKr7mKLUEn8bIlXQxJ2nhbM5pi4N8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  myAssets {\n    id\n    mongoId\n    name\n    url\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Progress",
+			"item": [
+				{
+					"name": "CreateProgress",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NzIzNX0.vjuyerZJBi5R2etSY6-3IdHw_p7PxwKiRuF6nz64Umk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  createProgress(input: {\n    scenarioId: \"688de491090b9dc997b6c0e2\"\n    currentSceneId: \"688de493090b9dc997b6c0e5\"\n  }) {\n    progress {\n      mongoId\n      scenarioId {\n        mongoId\n      }\n      currentSceneId {\n        mongoId\n        title\n      }\n      userId {\n        mongoId\n        email\n      }\n    }\n    success\n    message\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateProgress",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NzIzNX0.vjuyerZJBi5R2etSY6-3IdHw_p7PxwKiRuF6nz64Umk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  updateProgress(progressId: \"688e44dff3d80b37c88304bf\", input: {\n    currentSceneId: \"688de493090b9dc997b6c0e5\"\n    totalTimeSpent: 120\n  }) {\n    progress {\n      mongoId\n      scenarioId {\n        mongoId\n      }\n      currentSceneId {\n        mongoId\n        title\n      }\n      userId {\n        mongoId\n        email\n      }\n    }\n    success\n    message\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteProgress",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NzIzNX0.vjuyerZJBi5R2etSY6-3IdHw_p7PxwKiRuF6nz64Umk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  deleteProgress(progressId: \"688e44dff3d80b37c88304bf\") {\n    success\n    message\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllProgression",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NzIzNX0.vjuyerZJBi5R2etSY6-3IdHw_p7PxwKiRuF6nz64Umk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  allProgress {\n    mongoId\n    scenarioId {\n      id\n      # ou un autre champ comme name si disponible\n    }\n    userId {\n      mongoId\n      email\n    }\n    currentSceneId {\n      id\n      # ou un autre champ comme title si disponible\n    }\n    progressPercentage\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSelfProgression",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NzIzNX0.vjuyerZJBi5R2etSY6-3IdHw_p7PxwKiRuF6nz64Umk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  myProgress {\n    mongoId\n    scenarioId {\n      id\n      # ou name, mongoId, etc. selon ce que tu exposes dans ScenarioType\n    }\n    currentSceneId {\n      id\n      # ou title, mongoId, etc. selon ce que tu exposes dans SceneType\n    }\n    progressPercentage\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Story",
+			"item": [
+				{
+					"name": "CreateScenario",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE2MjI1MX0.dYSU4fKXUxN7hz2S1-IBT0Ws21Ucz7n1KEEow2bj_X8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  createScenario(input: {\n    title: \"Mon scénario\"\n    description: \"Une histoire interactive\"\n    isPublished: true\n  }) {\n    scenario {\n      mongoId\n      title\n      description\n      isPublished\n    }\n    success\n    message\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateScenario",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE2MjI1MX0.dYSU4fKXUxN7hz2S1-IBT0Ws21Ucz7n1KEEow2bj_X8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  updateScenario(scenarioId: \"688e56d3876c28a4c383cfb0\", input: {\n    title: \"Titre modifié\"\n    description: \"Description modifiée\"\n    isPublished: true\n  }) {\n    scenario {\n      mongoId\n      title\n      description\n      isPublished\n    }\n    success\n    message\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateScene",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE2MjI1MX0.dYSU4fKXUxN7hz2S1-IBT0Ws21Ucz7n1KEEow2bj_X8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  createScene(input: {\n    scenarioId: \"688e56d3876c28a4c383cfb0\"\n    title: \"Choix 2 première scène\"\n    text: \"Choix 2 première scène\"\n    order: 3\n    isStartScene: false\n    isEndScene: false\n    # imageId: \"<ASSET_ID>\" (optionnel)\n    # soundId: \"<ASSET_ID>\" (optionnel)\n  }) {\n    scene {\n      mongoId\n      title\n      text\n      order\n      isStartScene\n      isEndScene\n    }\n    success\n    message\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateChoice",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE2MjI1MX0.dYSU4fKXUxN7hz2S1-IBT0Ws21Ucz7n1KEEow2bj_X8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  createChoice(input: {\n    fromSceneId: \"688e5944876c28a4c383cfb1\"\n    toSceneId: \"688e59c2876c28a4c383cfb3\"\n    text: \"Aller à la scène suivante choix 2\"\n    order: 2\n    # condition: \"{\\\"score\\\": 10}\" (optionnel)\n  }) {\n    choice {\n      mongoId\n      text\n      order\n      fromSceneId {\n        mongoId\n        title\n      }\n      toSceneId {\n        mongoId\n        title\n      }\n    }\n    success\n    message\n  }\n} ",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllScenario",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE2MjI1MX0.dYSU4fKXUxN7hz2S1-IBT0Ws21Ucz7n1KEEow2bj_X8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  allScenarios {\n    mongoId\n    title\n    description\n    isPublished\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/graphql/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n  login(email: \"admin@example.com\", password: \"admin123\") {\n    token\n    success\n    message\n  }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/graphql/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"graphql",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
