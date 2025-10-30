@@ -12,7 +12,7 @@ class UserType(MongoengineObjectType):
     mongo_id = graphene.String()
     class Meta:
         model = User
-        fields = ('id', 'mongo_id' 'email', 'role', 'first_name', 'last_name', 'created_at', 'updated_at')
+        fields = ('id', 'mongo_id', 'email', 'role', 'first_name', 'last_name', 'created_at', 'updated_at')
         interfaces = (graphene.relay.Node,)
     def resolve_mongo_id(parent, info):
         return str(parent.id)
