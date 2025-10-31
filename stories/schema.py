@@ -73,6 +73,9 @@ class CreateSceneInput(graphene.InputObjectType):
     sound_id = graphene.ID()
     is_start_scene = graphene.Boolean(default_value=False)
     is_end_scene = graphene.Boolean(default_value=False)
+    # Option pour générer automatiquement les assets via IA
+    auto_generate_image = graphene.Boolean(default_value=False)
+    auto_generate_sound = graphene.Boolean(default_value=False)
 
 
 class UpdateSceneInput(graphene.InputObjectType):
@@ -222,13 +225,94 @@ class CreateScene(graphene.Mutation):
                 is_end_scene=input.is_end_scene
             )
             
-            # Ajouter les assets si fournis
+            # Ajouter les assets si fournis manuellement
             if input.image_id:
                 from assets.models import Asset
                 scene.image_id = Asset.objects(id=input.image_id).first()
             if input.sound_id:
                 from assets.models import Asset
                 scene.sound_id = Asset.objects(id=input.sound_id).first()
+            
+            # Génération automatique d'assets via IA si demandé
+            if input.auto_generate_image and not scene.image_id:
+                try:
+                    from assets.services import ImageGenerationService, AssetStorageService
+                    from assets.models import Asset
+                    import uuid
+                    
+                    image_service = ImageGenerationService()
+                    storage_service = AssetStorageService()
+                    
+                    # Utiliser le texte de la scène comme prompt pour l'image
+                    prompt = f"{input.title}. {input.text}"
+                    image_bytes, metadata = image_service.generate(prompt)
+                    
+                    extension = metadata.get('format', 'png')
+                    filename = f"{uuid.uuid4()}.{extension}"
+                    url = storage_service.save_image(image_bytes, filename)
+                    
+                    mime_type_map = {
+                        'png': 'image/png',
+                        'jpg': 'image/jpeg',
+                        'jpeg': 'image/jpeg',
+                        'webp': 'image/webp'
+                    }
+                    mime_type = mime_type_map.get(extension, 'image/png')
+                    
+                    image_asset = Asset(
+                        type='image',
+                        name=f"Image générée: {input.title}",
+                        filename=filename,
+                        url=url,
+                        file_size=len(image_bytes),
+                        mime_type=mime_type,
+                        metadata=metadata,
+                        uploaded_by=user,
+                        is_public=True
+                    )
+                    image_asset.save()
+                    scene.image_id = image_asset
+                    
+                except Exception as e:
+                    # Si la génération échoue, on continue sans l'image
+                    # (on pourrait logger l'erreur ici)
+                    pass
+            
+            if input.auto_generate_sound and not scene.sound_id:
+                try:
+                    from assets.services import SoundGenerationService, AssetStorageService
+                    from assets.models import Asset
+                    import uuid
+                    
+                    sound_service = SoundGenerationService()
+                    storage_service = AssetStorageService()
+                    
+                    # Utiliser le texte de la scène pour générer un son TTS
+                    audio_bytes, metadata = sound_service.generate_text_to_speech(
+                        input.text, 
+                        lang='fr'
+                    )
+                    
+                    filename = f"{uuid.uuid4()}.mp3"
+                    url = storage_service.save_audio(audio_bytes, filename)
+                    
+                    sound_asset = Asset(
+                        type='sound',
+                        name=f"Son généré: {input.title}",
+                        filename=filename,
+                        url=url,
+                        file_size=len(audio_bytes),
+                        mime_type='audio/mpeg',
+                        metadata=metadata,
+                        uploaded_by=user,
+                        is_public=True
+                    )
+                    sound_asset.save()
+                    scene.sound_id = sound_asset
+                    
+                except Exception as e:
+                    # Si la génération échoue, on continue sans le son
+                    pass
             
             scene.save()
             

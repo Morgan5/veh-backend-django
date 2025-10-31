@@ -31,22 +31,26 @@ Backend Django pour une application de livre dont vous êtes le héros, connect�
 ## 🔧 Installation
 
 1. **Cloner le projet**
+
 ```bash
 git clone <repository-url>
 cd backend-django
 ```
 
 2. **Installer les dépendances**
+
 ```bash
 pip install -r requirements.txt
 ```
 
 3. **Configurer les variables d'environnement**
+
 ```bash
 cp env.example .env
 ```
 
 Éditer le fichier `.env` avec ces configurations :
+
 ```env
 # Django Settings
 DEBUG=True
@@ -63,10 +67,11 @@ JWT_ALGORITHM=HS256
 JWT_EXPIRATION_DELTA=3600
 
 # CORS Settings
-CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000 
+CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
 ```
 
 5. **Lancer le serveur de développement**
+
 ```bash
 python manage.py runserver
 ```
@@ -85,31 +90,39 @@ python manage.py runserver
 ## 🔌 API GraphQL
 
 ### Endpoint
+
 - **GraphQL Playground** : `http://localhost:8000/graphql/`
 - **A importer dans postman pour tester les endpoints GraphQL** : voir `VEH.postman_collection.json`
-
 
 ## 📱 Applications Django
 
 ### 1. **users** - Gestion des utilisateurs
+
 - Modèle User avec rôles admin/player
 - Authentification JWT
 - Hachage sécurisé des mots de passe
 
 ### 2. **stories** - Scénarios narratifs
+
 - Modèles Scenario, Scene, Choice
 - Relations entre scènes et choix
 - Gestion des auteurs
 
 ### 3. **progress** - Suivi de progression
+
 - Modèle PlayerProgress
 - Historique des choix
 - Calcul de progression
 
 ### 4. **assets** - Gestion des médias
+
 - Modèle Asset pour images/sons
 - Métadonnées des fichiers
-- Génération d'assets (placeholder IA)
+- **Génération d'assets via IA** ✨
+  - Images générées via Hugging Face Stable Diffusion
+  - Sons générés via gTTS (Text-to-Speech) et MusicGen
+  - Génération automatique lors de la création de scènes
+  - Voir `assets/README_GENERATION_IA.md` pour plus de détails
 
 ## 🔒 Sécurité
 
@@ -121,6 +134,7 @@ python manage.py runserver
 ## 🚀 Déploiement
 
 ### Variables d'environnement de production
+
 ```env
 DEBUG=False
 SECRET_KEY=your-production-secret-key
@@ -129,6 +143,7 @@ MONGODB_URI=your-production-mongodb-uri
 ```
 
 ### Commandes de déploiement
+
 ```bash
 python manage.py collectstatic
 python manage.py migrate

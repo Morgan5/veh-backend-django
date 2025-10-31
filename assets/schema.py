@@ -201,18 +201,23 @@ class DeleteAsset(graphene.Mutation):
 
 class GenerateAsset(graphene.Mutation):
     """
-    Mutation pour générer un asset (placeholder pour l'IA)
+    Mutation pour générer un asset via IA
+    - Images : générées via Hugging Face Stable Diffusion à partir de descriptions
+    - Sons : générés via gTTS (Text-to-Speech) ou Hugging Face MusicGen pour la musique
     """
     class Arguments:
         type = graphene.String(required=True)
         name = graphene.String(required=True)
         description = graphene.String()
+        # Options spécifiques selon le type
+        language = graphene.String()  # Pour les sons TTS (défaut: 'fr')
+        duration = graphene.Int()  # Pour la musique d'ambiance (défaut: 30)
     
     asset = graphene.Field(AssetType)
     success = graphene.Boolean()
     message = graphene.String()
     
-    def mutate(self, info, type, name, description=None):
+    def mutate(self, info, type, name, description=None, language=None, duration=None):
         user = get_user_from_context(info)
         if not user:
             raise Exception("Authentication required")
@@ -227,43 +232,129 @@ class GenerateAsset(graphene.Mutation):
                     message=f"Type d'asset invalide. Types valides: {', '.join(valid_types)}"
                 )
             
-            # Générer un nom de fichier unique
+            # Vérifier qu'une description est fournie
+            if not description:
+                return GenerateAsset(
+                    asset=None,
+                    success=False,
+                    message="Une description est requise pour générer l'asset"
+                )
+            
+            from .services import ImageGenerationService, SoundGenerationService, AssetStorageService
             import uuid
-            filename = f"{uuid.uuid4()}.{type}"
+            import os
             
-            # URL placeholder (dans un vrai projet, ce serait généré par un service IA)
-            url = f"https://cdn.example.com/generated/{filename}"
+            storage_service = AssetStorageService()
             
-            # Métadonnées selon le type
-            metadata = {}
             if type == 'image':
-                metadata = {'width': 1920, 'height': 1080}
-            elif type in ['sound', 'video']:
-                metadata = {'duration': 30}  # 30 secondes par défaut
+                # Générer une image via Hugging Face
+                image_service = ImageGenerationService()
+                image_bytes, metadata = image_service.generate(description)
+                
+                # Générer un nom de fichier unique
+                extension = metadata.get('format', 'png')
+                filename = f"{uuid.uuid4()}.{extension}"
+                
+                # Sauvegarder l'image
+                url = storage_service.save_image(image_bytes, filename)
+                
+                # Déterminer le MIME type
+                mime_type_map = {
+                    'png': 'image/png',
+                    'jpg': 'image/jpeg',
+                    'jpeg': 'image/jpeg',
+                    'webp': 'image/webp'
+                }
+                mime_type = mime_type_map.get(extension, 'image/png')
+                
+                # Créer l'asset
+                asset = Asset(
+                    type=type,
+                    name=name,
+                    filename=filename,
+                    url=url,
+                    file_size=len(image_bytes),
+                    mime_type=mime_type,
+                    metadata=metadata,
+                    uploaded_by=user,
+                    is_public=True
+                )
+                
+            elif type == 'sound':
+                # Décider si c'est de la narration (TTS) ou de la musique d'ambiance
+                # Par défaut, on utilise TTS si la description est courte (< 200 caractères)
+                # Sinon, on considère que c'est une description de musique d'ambiance
+                
+                sound_service = SoundGenerationService()
+                
+                if len(description) < 200:
+                    # Utiliser Text-to-Speech pour la narration
+                    lang = language or 'fr'
+                    audio_bytes, metadata = sound_service.generate_text_to_speech(description, lang=lang)
+                    extension = 'mp3'
+                    mime_type = 'audio/mpeg'
+                else:
+                    # Générer de la musique d'ambiance
+                    duration_sec = duration or 30
+                    audio_bytes, metadata = sound_service.generate_ambient_music(description, duration=duration_sec)
+                    extension = 'wav'  # MusicGen génère du WAV
+                    mime_type = 'audio/wav'
+                
+                # Générer un nom de fichier unique
+                filename = f"{uuid.uuid4()}.{extension}"
+                
+                # Sauvegarder l'audio
+                url = storage_service.save_audio(audio_bytes, filename)
+                
+                # Créer l'asset
+                asset = Asset(
+                    type=type,
+                    name=name,
+                    filename=filename,
+                    url=url,
+                    file_size=len(audio_bytes),
+                    mime_type=mime_type,
+                    metadata=metadata,
+                    uploaded_by=user,
+                    is_public=True
+                )
+                
+            elif type == 'video':
+                # Pour les vidéos, on peut générer une image animée ou une vidéo simple
+                # Pour l'instant, on retourne une erreur car la génération vidéo est complexe
+                return GenerateAsset(
+                    asset=None,
+                    success=False,
+                    message="La génération de vidéos n'est pas encore implémentée"
+                )
             
-            asset = Asset(
-                type=type,
-                name=name,
-                filename=filename,
-                url=url,
-                file_size=1024 * 1024,  # 1MB par défaut
-                mime_type=f"{type}/generated",
-                metadata=metadata,
-                uploaded_by=user,
-                is_public=True
-            )
+            else:
+                return GenerateAsset(
+                    asset=None,
+                    success=False,
+                    message=f"Type d'asset non supporté pour la génération: {type}"
+                )
+            
             asset.save()
             
             return GenerateAsset(
                 asset=asset,
                 success=True,
-                message=f"Asset {type} généré avec succès"
+                message=f"Asset {type} généré avec succès via IA"
+            )
+            
+        except ValueError as e:
+            # Erreur de configuration (ex: token manquant)
+            return GenerateAsset(
+                asset=None,
+                success=False,
+                message=f"Erreur de configuration: {str(e)}"
             )
         except Exception as e:
             return GenerateAsset(
                 asset=None,
                 success=False,
-                message=str(e)
+                message=f"Erreur lors de la génération: {str(e)}"
             )
 
 
