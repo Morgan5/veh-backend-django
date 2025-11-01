@@ -1,5 +1,6 @@
 import graphene
-#from graphene_django.debug import DjangoDebug
+
+# from graphene_django.debug import DjangoDebug
 import graphql_jwt
 
 # Import des schémas des applications
@@ -9,18 +10,13 @@ from progress.schema import Query as ProgressQuery, Mutation as ProgressMutation
 from assets.schema import Query as AssetsQuery, Mutation as AssetsMutation
 
 
-class Query(
-    UsersQuery,
-    StoriesQuery,
-    ProgressQuery,
-    AssetsQuery,
-    graphene.ObjectType
-):
+class Query(UsersQuery, StoriesQuery, ProgressQuery, AssetsQuery, graphene.ObjectType):
     """
     Schéma GraphQL principal - Query
     Combine toutes les queries des différentes applications
     """
-    #debug = graphene.Field(DjangoDebug, name='__debug')
+
+    # debug = graphene.Field(DjangoDebug, name='__debug')
     pass
 
 
@@ -29,12 +25,13 @@ class Mutation(
     StoriesMutation,
     ProgressMutation,
     AssetsMutation,
-    graphene.ObjectType
+    graphene.ObjectType,
 ):
     """
     Schéma GraphQL principal - Mutation
     Combine toutes les mutations des différentes applications
     """
+
     tokenAuth = graphql_jwt.ObtainJSONWebToken.Field()
     verifyToken = graphql_jwt.Verify.Field()
     refreshToken = graphql_jwt.Refresh.Field()
@@ -42,4 +39,4 @@ class Mutation(
 
 
 # Schéma GraphQL principal
-schema = graphene.Schema(query=Query, mutation=Mutation) 
+schema = graphene.Schema(query=Query, mutation=Mutation)
