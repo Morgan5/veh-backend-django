@@ -29,11 +29,8 @@ class ScenarioType(MongoengineObjectType):
 
 
 class SceneType(MongoengineObjectType):
-    """
-    Type GraphQL pour le modèle Scene
-    """
-
     mongo_id = graphene.String()
+    choices = graphene.List(lambda: ChoiceType)
 
     class Meta:
         model = Scene
@@ -43,13 +40,13 @@ class SceneType(MongoengineObjectType):
     def resolve_mongo_id(parent, info):
         return str(parent.id)
 
+    def resolve_choices(parent, info):
+        return Choice.objects(from_scene_id=parent.id)
+
 
 class ChoiceType(MongoengineObjectType):
-    """
-    Type GraphQL pour le modèle Choice
-    """
-
     mongo_id = graphene.String()
+    to_scene_id = graphene.Field(lambda: SceneType)
 
     class Meta:
         model = Choice
@@ -59,6 +56,8 @@ class ChoiceType(MongoengineObjectType):
     def resolve_mongo_id(parent, info):
         return str(parent.id)
 
+    def resolve_to_scene_id(parent, info):
+        return Scene.objects(id=parent.to_scene_id.id).first()
 
 # Input types
 class CreateScenarioInput(graphene.InputObjectType):
