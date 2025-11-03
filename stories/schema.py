@@ -13,6 +13,7 @@ class ScenarioType(MongoengineObjectType):
     """
 
     mongo_id = graphene.String()
+    scenes_list = graphene.List(lambda: SceneType)
 
     class Meta:
         model = Scenario
@@ -21,6 +22,10 @@ class ScenarioType(MongoengineObjectType):
 
     def resolve_mongo_id(parent, info):
         return str(parent.id)
+    
+    def resolve_scenes_list(parent, info):
+        """Retourne les scènes comme une liste simple au lieu d'une connexion"""
+        return list(parent.scenes) if parent.scenes else []
 
 
 class SceneType(MongoengineObjectType):

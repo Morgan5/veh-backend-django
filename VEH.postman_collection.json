@@ -768,7 +768,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "query {\n  allScenarios {\n    id\n    mongoId\n    title\n    description\n    isPublished\n    scenes {\n      id\n      mongoId\n      title\n      order\n      isStartScene\n      isEndScene\n    }\n  }\n}",
+                "query": "query {\n  allScenarios {\n    id\n    mongoId\n    title\n    description\n    isPublished\n    scenesList {\n      id\n      mongoId\n      title\n      order\n      isStartScene\n      isEndScene\n    }\n  }\n}",
                 "variables": ""
               }
             },
