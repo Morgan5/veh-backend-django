@@ -15,7 +15,7 @@ Backend Django pour une application de livre dont vous êtes le héros, connect�
 
 ## 🛠️ Stack Technique
 
-- **Django 4.2** : Framework web Python
+- **Django 4.2.23** : Framework web Python
 - **MongoDB Atlas** : Base de données NoSQL
 - **MongoEngine** : ODM pour MongoDB
 - **GraphQL** : API moderne avec graphene-django
@@ -42,7 +42,7 @@ Backend Django pour une application de livre dont vous êtes le héros, connect�
 
 ```bash
 git clone <repository-url>
-cd backend-django
+cd veh-backend-django
 ```
 
 2. **Installer les dépendances**
@@ -222,4 +222,4 @@ Si vous ne souhaitez **pas** utiliser la génération musicale :
 
 ## 📄 Licence
 
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+Ce projet est sous licence MIT.

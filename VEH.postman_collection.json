@@ -30,6 +30,50 @@
             },
             "description": "Connexion en tant qu'administrateur pour obtenir le token JWT"
           }
+        },
+        {
+          "name": "Login - Player1",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  login(email: \"player1@example.com\", password: \"player123\") {\n    token\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Connexion en tant que Player1 (Alice) pour obtenir le token JWT"
+          }
+        },
+        {
+          "name": "Login - Player2",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  login(email: \"player2@example.com\", password: \"player123\") {\n    token\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Connexion en tant que Player2 (Bob) pour obtenir le token JWT"
+          }
         }
       ]
     },
@@ -40,13 +84,7 @@
           "name": "CreateUser - Admin",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "JWT {{admin_token}}",
-                "type": "text"
-              }
-            ],
+            "header": [],
             "body": {
               "mode": "graphql",
               "graphql": {
@@ -68,13 +106,7 @@
           "name": "CreateUser - Player1",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "JWT {{admin_token}}",
-                "type": "text"
-              }
-            ],
+            "header": [],
             "body": {
               "mode": "graphql",
               "graphql": {
@@ -96,13 +128,7 @@
           "name": "CreateUser - Player2",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "JWT {{admin_token}}",
-                "type": "text"
-              }
-            ],
+            "header": [],
             "body": {
               "mode": "graphql",
               "graphql": {
@@ -167,7 +193,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "mutation {\n  createScene(input: {\n    scenarioId: \"{{scenario_id}}\"\n    title: \"L'entrée du château\"\n    text: \"Vous vous trouvez devant les ruines d'un ancien château. Les murs de pierre sont recouverts de lierre et de mousse. Une grande porte en bois se dresse devant vous, partiellement ouverte.\"\n    order: 1\n    isStartScene: true\n    isEndScene: false\n  }) {\n    scene {\n      id\n      mongoId\n      title\n      text\n      order\n      isStartScene\n      isEndScene\n    }\n    success\n    message\n  }\n}",
+                "query": "mutation {\n  createScene(input: {\n    scenarioId: \"{{scenario_id}}\"\n    title: \"L'entrée du château\"\n    text: \"Vous vous trouvez devant les ruines d'un ancien château. Les murs de pierre sont recouverts de lierre et de mousse. Une grande porte en bois se dresse devant vous, partiellement ouverte.\"\n    order: 1\n    isStartScene: true\n    isEndScene: false\n    autoGenerateImage: true\n    autoGenerateSound: true\n    autoGenerateMusic: false\n  }) {\n    scene {\n      id\n      mongoId\n      title\n      text\n      order\n      isStartScene\n      isEndScene\n    }\n    success\n    message\n  }\n}",
                 "variables": ""
               }
             },
@@ -195,7 +221,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "mutation {\n  createScene(input: {\n    scenarioId: \"{{scenario_id}}\"\n    title: \"Le grand hall\"\n    text: \"Vous pénétrez dans un vaste hall aux plafonds voûtés. Des torches vacillantes projettent des ombres dansantes sur les murs de pierre. Des statues de chevaliers semblent vous observer depuis les recoins.\"\n    order: 2\n    isStartScene: false\n    isEndScene: false\n  }) {\n    scene {\n      id\n      mongoId\n      title\n      text\n      order\n      isStartScene\n      isEndScene\n    }\n    success\n    message\n  }\n}",
+                "query": "mutation {\n  createScene(input: {\n    scenarioId: \"{{scenario_id}}\"\n    title: \"Le grand hall\"\n    text: \"Vous pénétrez dans un vaste hall aux plafonds voûtés. Des torches vacillantes projettent des ombres dansantes sur les murs de pierre. Des statues de chevaliers semblent vous observer depuis les recoins.\"\n    order: 2\n    isStartScene: false\n    isEndScene: false\n    autoGenerateImage: true\n    autoGenerateSound: true\n    autoGenerateMusic: false\n  }) {\n    scene {\n      id\n      mongoId\n      title\n      text\n      order\n      isStartScene\n      isEndScene\n    }\n    success\n    message\n  }\n}",
                 "variables": ""
               }
             },
@@ -223,7 +249,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "mutation {\n  createScene(input: {\n    scenarioId: \"{{scenario_id}}\"\n    title: \"Les donjons souterrains\"\n    text: \"Vous descendez un escalier de pierre étroit et humide. L'air est froid et chargé d'humidité. Des gouttes d'eau résonnent dans l'obscurité, créant une atmosphère oppressante.\"\n    order: 3\n    isStartScene: false\n    isEndScene: false\n  }) {\n    scene {\n      id\n      mongoId\n      title\n      text\n      order\n      isStartScene\n      isEndScene\n    }\n    success\n    message\n  }\n}",
+                "query": "mutation {\n  createScene(input: {\n    scenarioId: \"{{scenario_id}}\"\n    title: \"Les donjons souterrains\"\n    text: \"Vous descendez un escalier de pierre étroit et humide. L'air est froid et chargé d'humidité. Des gouttes d'eau résonnent dans l'obscurité, créant une atmosphère oppressante.\"\n    order: 3\n    isStartScene: false\n    isEndScene: false\n    autoGenerateImage: false\n    autoGenerateSound: false\n    autoGenerateMusic: false\n  }) {\n    scene {\n      id\n      mongoId\n      title\n      text\n      order\n      isStartScene\n      isEndScene\n    }\n    success\n    message\n  }\n}",
                 "variables": ""
               }
             },
@@ -251,7 +277,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "mutation {\n  createScene(input: {\n    scenarioId: \"{{scenario_id}}\"\n    title: \"La bibliothèque secrète\"\n    text: \"Vous découvrez une bibliothèque secrète remplie de livres anciens. Des rayons de lumière filtrant par les fenêtres éclairent des étagères poussiéreuses. Des grimoires aux couvertures dorées semblent appeler votre attention.\"\n    order: 4\n    isStartScene: false\n    isEndScene: false\n  }) {\n    scene {\n      id\n      mongoId\n      title\n      text\n      order\n      isStartScene\n      isEndScene\n    }\n    success\n    message\n  }\n}",
+                "query": "mutation {\n  createScene(input: {\n    scenarioId: \"{{scenario_id}}\"\n    title: \"La bibliothèque secrète\"\n    text: \"Vous découvrez une bibliothèque secrète remplie de livres anciens. Des rayons de lumière filtrant par les fenêtres éclairent des étagères poussiéreuses. Des grimoires aux couvertures dorées semblent appeler votre attention.\"\n    order: 4\n    isStartScene: false\n    isEndScene: false\n    autoGenerateImage: true\n    autoGenerateSound: true\n    autoGenerateMusic: false\n  }) {\n    scene {\n      id\n      mongoId\n      title\n      text\n      order\n      isStartScene\n      isEndScene\n    }\n    success\n    message\n  }\n}",
                 "variables": ""
               }
             },
@@ -279,7 +305,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "mutation {\n  createScene(input: {\n    scenarioId: \"{{scenario_id}}\"\n    title: \"La salle du trône\"\n    text: \"Vous pénétrez dans une immense salle du trône. Un trône en pierre imposant domine la pièce, entouré de bannières anciennes qui flottent dans l'air. Des échos lointains résonnent, créant une atmosphère à la fois majestueuse et inquiétante.\"\n    order: 5\n    isStartScene: false\n    isEndScene: true\n  }) {\n    scene {\n      id\n      mongoId\n      title\n      text\n      order\n      isStartScene\n      isEndScene\n    }\n    success\n    message\n  }\n}",
+                "query": "mutation {\n  createScene(input: {\n    scenarioId: \"{{scenario_id}}\"\n    title: \"La salle du trône\"\n    text: \"Vous pénétrez dans une immense salle du trône. Un trône en pierre imposant domine la pièce, entouré de bannières anciennes qui flottent dans l'air. Des échos lointains résonnent, créant une atmosphère à la fois majestueuse et inquiétante.\"\n    order: 5\n    isStartScene: false\n    isEndScene: true\n    autoGenerateImage: true\n    autoGenerateSound: true\n    autoGenerateMusic: false\n  }) {\n    scene {\n      id\n      mongoId\n      title\n      text\n      order\n      isStartScene\n      isEndScene\n    }\n    success\n    message\n  }\n}",
                 "variables": ""
               }
             },
@@ -291,6 +317,118 @@
               "path": ["graphql", ""]
             },
             "description": "Scène de fin - La salle du trône"
+          }
+        },
+        {
+          "name": "UpdateScene - Modifier une scène",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  updateScene(sceneId: \"{{scene_2_id}}\", input: {\n    title: \"Le grand hall (modifié)\"\n    text: \"Vous pénétrez dans un vaste hall aux plafonds voûtés. Des torches vacillantes projettent des ombres dansantes sur les murs de pierre. Des statues de chevaliers semblent vous observer depuis les recoins. [TEXTE MODIFIÉ]\"\n    order: 2\n  }) {\n    scene {\n      id\n      mongoId\n      title\n      text\n      order\n      isStartScene\n      isEndScene\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Modifier une scène existante"
+          }
+        },
+        {
+          "name": "DeleteScene - Supprimer une scène",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  deleteScene(sceneId: \"{{scene_4_id}}\") {\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Supprimer une scène et tous ses choix associés"
+          }
+        },
+        {
+          "name": "UpdateScenario - Modifier un scénario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  updateScenario(scenarioId: \"{{scenario_id}}\", input: {\n    title: \"Le Château Oublié (Édition Spéciale)\"\n    description: \"Une aventure épique dans les ruines d'un ancien château rempli de mystères - Version mise à jour\"\n    isPublished: true\n  }) {\n    scenario {\n      id\n      mongoId\n      title\n      description\n      isPublished\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Modifier un scénario existant"
+          }
+        },
+        {
+          "name": "DeleteScenario - Supprimer un scénario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  deleteScenario(scenarioId: \"{{scenario_id}}\") {\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Supprimer un scénario complet et toutes ses dépendances (scènes, choix)"
           }
         }
       ]
@@ -437,6 +575,62 @@
             },
             "description": "Choice depuis la bibliothèque vers la salle du trône"
           }
+        },
+        {
+          "name": "UpdateChoice - Modifier un choix",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  updateChoice(choiceId: \"{{choice_id}}\", input: {\n    text: \"Pénétrer dans le grand hall (modifié)\"\n    order: 1\n    toSceneId: \"{{scene_2_id}}\"\n  }) {\n    choice {\n      id\n      mongoId\n      text\n      order\n      fromSceneId {\n        mongoId\n        title\n      }\n      toSceneId {\n        mongoId\n        title\n      }\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Modifier un choix existant"
+          }
+        },
+        {
+          "name": "DeleteChoice - Supprimer un choix",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  deleteChoice(choiceId: \"{{choice_id}}\") {\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Supprimer un choix"
+          }
         }
       ]
     },
@@ -450,7 +644,7 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "JWT {{admin_token}}",
+                "value": "JWT {{player1_token}}",
                 "type": "text"
               }
             ],
@@ -478,7 +672,7 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "JWT {{admin_token}}",
+                "value": "JWT {{player2_token}}",
                 "type": "text"
               }
             ],
@@ -497,6 +691,62 @@
               "path": ["graphql", ""]
             },
             "description": "Créer une progression pour player2 (Bob) - commence à la scène de début"
+          }
+        },
+        {
+          "name": "RecordProgress - Avancer dans le scénario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{player_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  recordProgress(input: {\n    progressId: \"{{progress_id}}\"\n    sceneId: \"{{scene_2_id}}\"\n    choiceId: \"{{choice_id}}\"\n    metadata: {\n      timestamp: \"2025-01-15T10:30:00Z\"\n    }\n  }) {\n    progress {\n      id\n      mongoId\n      currentSceneId {\n        mongoId\n        title\n      }\n      history {\n        sceneId {\n          mongoId\n          title\n        }\n        choiceId {\n          mongoId\n          text\n        }\n        timestamp\n      }\n      progressPercentage\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Enregistrer un choix et avancer dans le scénario"
+          }
+        },
+        {
+          "name": "GoBackInHistory - Retour en arrière",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{player_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  goBackInHistory(progressId: \"{{progress_id}}\", stepsBack: 1) {\n    progress {\n      id\n      mongoId\n      currentSceneId {\n        mongoId\n        title\n        text\n      }\n      history {\n        sceneId {\n          mongoId\n          title\n        }\n        choiceId {\n          mongoId\n          text\n        }\n        timestamp\n      }\n      progressPercentage\n      isCompleted\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Revenir en arrière de N pas dans l'historique de progression"
           }
         }
       ]
@@ -575,6 +825,16 @@
       "type": "string"
     },
     {
+      "key": "player1_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "player2_token",
+      "value": "",
+      "type": "string"
+    },
+    {
       "key": "scenario_id",
       "value": "",
       "type": "string"
@@ -601,6 +861,16 @@
     },
     {
       "key": "scene_5_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "choice_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "progress_id",
       "value": "",
       "type": "string"
     }

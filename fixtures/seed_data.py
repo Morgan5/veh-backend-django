@@ -264,7 +264,7 @@ def create_chateau_oublie_scenario(admin_user):
             "is_end_scene": False,
             "auto_generate_image": True,
             "auto_generate_sound": True,
-            "auto_generate_music": True,
+            "auto_generate_music": False,
         },
         {
             "title": "Le grand hall",
@@ -284,7 +284,7 @@ def create_chateau_oublie_scenario(admin_user):
             "is_end_scene": False,
             "auto_generate_image": False,
             "auto_generate_sound": False,
-            "auto_generate_music": True,
+            "auto_generate_music": False,
         },
         {
             "title": "La bibliothèque secrète",
@@ -304,7 +304,7 @@ def create_chateau_oublie_scenario(admin_user):
             "is_end_scene": True,
             "auto_generate_image": True,
             "auto_generate_sound": True,
-            "auto_generate_music": True,
+            "auto_generate_music": False,
         },
     ]
 

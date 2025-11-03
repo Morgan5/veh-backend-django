@@ -245,6 +245,92 @@ class DeleteProgress(graphene.Mutation):
             return DeleteProgress(success=False, message=str(e))
 
 
+class GoBackInHistory(graphene.Mutation):
+    """
+    Mutation pour revenir en arrière dans l'historique d'une progression
+    Permet de revenir à une scène précédente dans l'historique
+    """
+
+    class Arguments:
+        progress_id = graphene.ID(required=True)
+        steps_back = graphene.Int(
+            required=True,
+            description="Nombre de pas à reculer dans l'historique (minimum 1)",
+        )
+
+    progress = graphene.Field(PlayerProgressType)
+    success = graphene.Boolean()
+    message = graphene.String()
+
+    def mutate(self, info, progress_id, steps_back):
+        user = get_user_from_context(info)
+        if not user:
+            raise Exception("Authentication required")
+
+        try:
+            progress = PlayerProgress.objects(id=progress_id).first()
+
+            if not progress:
+                return GoBackInHistory(
+                    progress=None, success=False, message="Progression non trouvée"
+                )
+
+            # Vérifier que l'utilisateur est propriétaire de la progression
+            if str(progress.user_id.id) != str(user.id):
+                return GoBackInHistory(
+                    progress=None,
+                    success=False,
+                    message="Vous n'avez pas la permission d'accéder à cette progression",
+                )
+
+            # Vérifier que steps_back est valide
+            if steps_back < 1:
+                return GoBackInHistory(
+                    progress=None,
+                    success=False,
+                    message="Le nombre de pas doit être au moins 1",
+                )
+
+            history = progress.history
+
+            # Vérifier qu'il y a assez d'entrées dans l'historique
+            if len(history) < steps_back:
+                return GoBackInHistory(
+                    progress=None,
+                    success=False,
+                    message=f"Impossible de reculer de {steps_back} pas(s). L'historique ne contient que {len(history)} entrée(s)",
+                )
+
+            # Calculer l'index de la scène cible dans l'historique
+            # On recule de steps_back, donc on prend l'entrée à l'index (len(history) - steps_back)
+            target_index = len(history) - steps_back
+            target_entry = history[target_index]
+
+            # Mettre à jour la scène actuelle avec la scène cible
+            progress.current_scene_id = target_entry.scene_id
+
+            # Tronquer l'historique pour supprimer les entrées après la position cible
+            # On garde toutes les entrées jusqu'à target_index inclus
+            progress.history = history[: target_index + 1]
+
+            # Si le scénario était marqué comme complété, le démarquer
+            if progress.is_completed:
+                progress.is_completed = False
+                progress.completed_at = None
+
+            progress.save()
+
+            return GoBackInHistory(
+                progress=progress,
+                success=True,
+                message=f"Retour en arrière de {steps_back} pas(s) effectué avec succès",
+            )
+        except Exception as e:
+            return GoBackInHistory(
+                progress=None, success=False, message=f"Erreur : {str(e)}"
+            )
+
+
 # Queries
 class Query(graphene.ObjectType):
     """
@@ -322,6 +408,7 @@ class Mutation(graphene.ObjectType):
     record_progress = RecordProgress.Field()
     update_progress = UpdateProgress.Field()
     delete_progress = DeleteProgress.Field()
+    go_back_in_history = GoBackInHistory.Field()
 
 
 def get_user_from_context(info):

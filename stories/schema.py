@@ -430,6 +430,296 @@ class CreateChoice(graphene.Mutation):
             return CreateChoice(choice=None, success=False, message=str(e))
 
 
+class UpdateScene(graphene.Mutation):
+    """
+    Mutation pour mettre à jour une scène
+    """
+
+    class Arguments:
+        scene_id = graphene.ID(required=True)
+        input = UpdateSceneInput(required=True)
+
+    scene = graphene.Field(SceneType)
+    success = graphene.Boolean()
+    message = graphene.String()
+
+    def mutate(self, info, scene_id, input):
+        user = get_user_from_context(info)
+        if not user:
+            raise Exception("Authentication required")
+
+        try:
+            scene = Scene.objects(id=scene_id).first()
+
+            if not scene:
+                return UpdateScene(
+                    scene=None, success=False, message="Scène non trouvée"
+                )
+
+            # Vérifier que l'utilisateur est l'auteur du scénario
+            if str(scene.scenario_id.author_id.id) != str(user.id):
+                return UpdateScene(
+                    scene=None,
+                    success=False,
+                    message="Vous n'avez pas la permission de modifier cette scène",
+                )
+
+            # Mettre à jour les champs fournis
+            if input.title:
+                scene.title = input.title
+            if input.text:
+                scene.text = input.text
+            if input.order is not None:
+                scene.order = input.order
+            if input.is_start_scene is not None:
+                scene.is_start_scene = input.is_start_scene
+            if input.is_end_scene is not None:
+                scene.is_end_scene = input.is_end_scene
+
+            # Gérer les assets
+            if input.image_id is not None:
+                from assets.models import Asset
+
+                if input.image_id:
+                    scene.image_id = Asset.objects(id=input.image_id).first()
+                else:
+                    scene.image_id = None
+
+            if input.sound_id is not None:
+                from assets.models import Asset
+
+                if input.sound_id:
+                    scene.sound_id = Asset.objects(id=input.sound_id).first()
+                else:
+                    scene.sound_id = None
+
+            if input.music_id is not None:
+                from assets.models import Asset
+
+                if input.music_id:
+                    scene.music_id = Asset.objects(id=input.music_id).first()
+                else:
+                    scene.music_id = None
+
+            scene.save()
+
+            return UpdateScene(
+                scene=scene,
+                success=True,
+                message="Scène mise à jour avec succès",
+            )
+        except Exception as e:
+            return UpdateScene(scene=None, success=False, message=str(e))
+
+
+class UpdateChoice(graphene.Mutation):
+    """
+    Mutation pour mettre à jour un choix
+    """
+
+    class Arguments:
+        choice_id = graphene.ID(required=True)
+        input = UpdateChoiceInput(required=True)
+
+    choice = graphene.Field(ChoiceType)
+    success = graphene.Boolean()
+    message = graphene.String()
+
+    def mutate(self, info, choice_id, input):
+        user = get_user_from_context(info)
+        if not user:
+            raise Exception("Authentication required")
+
+        try:
+            choice = Choice.objects(id=choice_id).first()
+
+            if not choice:
+                return UpdateChoice(
+                    choice=None, success=False, message="Choix non trouvé"
+                )
+
+            # Vérifier que l'utilisateur est l'auteur du scénario
+            if str(choice.from_scene_id.scenario_id.author_id.id) != str(user.id):
+                return UpdateChoice(
+                    choice=None,
+                    success=False,
+                    message="Vous n'avez pas la permission de modifier ce choix",
+                )
+
+            # Mettre à jour les champs fournis
+            if input.to_scene_id:
+                to_scene = Scene.objects(id=input.to_scene_id).first()
+                if not to_scene:
+                    return UpdateChoice(
+                        choice=None,
+                        success=False,
+                        message="Scène destination non trouvée",
+                    )
+                choice.to_scene_id = to_scene
+
+            if input.text:
+                choice.text = input.text
+            if input.condition is not None:
+                choice.condition = input.condition
+            if input.order is not None:
+                choice.order = input.order
+
+            choice.save()
+
+            return UpdateChoice(
+                choice=choice,
+                success=True,
+                message="Choix mis à jour avec succès",
+            )
+        except Exception as e:
+            return UpdateChoice(choice=None, success=False, message=str(e))
+
+
+class DeleteScenario(graphene.Mutation):
+    """
+    Mutation pour supprimer un scénario
+    """
+
+    class Arguments:
+        scenario_id = graphene.ID(required=True)
+
+    success = graphene.Boolean()
+    message = graphene.String()
+
+    def mutate(self, info, scenario_id):
+        user = get_user_from_context(info)
+        if not user:
+            raise Exception("Authentication required")
+
+        try:
+            scenario = Scenario.objects(id=scenario_id).first()
+
+            if not scenario:
+                return DeleteScenario(success=False, message="Scénario non trouvé")
+
+            # Vérifier que l'utilisateur est l'auteur
+            if str(scenario.author_id.id) != str(user.id):
+                return DeleteScenario(
+                    success=False,
+                    message="Vous n'avez pas la permission de supprimer ce scénario",
+                )
+
+            # Vérifier s'il y a des progressions en cours (optionnel - peut être commenté si on veut autoriser la suppression)
+            # from progress.models import PlayerProgress
+            # active_progress = PlayerProgress.objects(scenario_id=scenario).first()
+            # if active_progress:
+            #     return DeleteScenario(
+            #         success=False,
+            #         message="Impossible de supprimer le scénario : des progressions sont en cours",
+            #     )
+
+            # Supprimer toutes les scènes et leurs choix associés
+            for scene in scenario.scenes:
+                # Supprimer tous les choix de cette scène
+                Choice.objects(from_scene_id=scene.id).delete()
+                Choice.objects(to_scene_id=scene.id).delete()
+                scene.delete()
+
+            # Supprimer le scénario
+            scenario.delete()
+
+            return DeleteScenario(success=True, message="Scénario supprimé avec succès")
+        except Exception as e:
+            return DeleteScenario(success=False, message=str(e))
+
+
+class DeleteScene(graphene.Mutation):
+    """
+    Mutation pour supprimer une scène
+    """
+
+    class Arguments:
+        scene_id = graphene.ID(required=True)
+
+    success = graphene.Boolean()
+    message = graphene.String()
+
+    def mutate(self, info, scene_id):
+        user = get_user_from_context(info)
+        if not user:
+            raise Exception("Authentication required")
+
+        try:
+            scene = Scene.objects(id=scene_id).first()
+
+            if not scene:
+                return DeleteScene(success=False, message="Scène non trouvée")
+
+            # Vérifier que l'utilisateur est l'auteur du scénario
+            if str(scene.scenario_id.author_id.id) != str(user.id):
+                return DeleteScene(
+                    success=False,
+                    message="Vous n'avez pas la permission de supprimer cette scène",
+                )
+
+            scenario = scene.scenario_id
+
+            # Supprimer tous les choix qui pointent vers ou depuis cette scène
+            Choice.objects(from_scene_id=scene.id).delete()
+            Choice.objects(to_scene_id=scene.id).delete()
+
+            # Retirer la scène de la liste des scènes du scénario
+            if scene in scenario.scenes:
+                scenario.scenes.remove(scene)
+                scenario.save()
+
+            # Supprimer la scène
+            scene.delete()
+
+            return DeleteScene(success=True, message="Scène supprimée avec succès")
+        except Exception as e:
+            return DeleteScene(success=False, message=str(e))
+
+
+class DeleteChoice(graphene.Mutation):
+    """
+    Mutation pour supprimer un choix
+    """
+
+    class Arguments:
+        choice_id = graphene.ID(required=True)
+
+    success = graphene.Boolean()
+    message = graphene.String()
+
+    def mutate(self, info, choice_id):
+        user = get_user_from_context(info)
+        if not user:
+            raise Exception("Authentication required")
+
+        try:
+            choice = Choice.objects(id=choice_id).first()
+
+            if not choice:
+                return DeleteChoice(success=False, message="Choix non trouvé")
+
+            # Vérifier que l'utilisateur est l'auteur du scénario
+            if str(choice.from_scene_id.scenario_id.author_id.id) != str(user.id):
+                return DeleteChoice(
+                    success=False,
+                    message="Vous n'avez pas la permission de supprimer ce choix",
+                )
+
+            from_scene = choice.from_scene_id
+
+            # Retirer le choix de la liste des choix de la scène source
+            if choice in from_scene.choices:
+                from_scene.choices.remove(choice)
+                from_scene.save()
+
+            # Supprimer le choix
+            choice.delete()
+
+            return DeleteChoice(success=True, message="Choix supprimé avec succès")
+        except Exception as e:
+            return DeleteChoice(success=False, message=str(e))
+
+
 # Queries
 class Query(graphene.ObjectType):
     """
@@ -490,8 +780,13 @@ class Mutation(graphene.ObjectType):
 
     create_scenario = CreateScenario.Field()
     update_scenario = UpdateScenario.Field()
+    delete_scenario = DeleteScenario.Field()
     create_scene = CreateScene.Field()
+    update_scene = UpdateScene.Field()
+    delete_scene = DeleteScene.Field()
     create_choice = CreateChoice.Field()
+    update_choice = UpdateChoice.Field()
+    delete_choice = DeleteChoice.Field()
 
 
 def get_user_from_context(info):
