@@ -1,816 +1,878 @@
 {
-	"info": {
-		"_postman_id": "6eb266fb-9220-4a5e-835f-f1bea3d66dcc",
-		"name": "VEH",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "24414357"
-	},
-	"item": [
-		{
-			"name": "User",
-			"item": [
-				{
-					"name": "GetAllUsers",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1MjEyM30.InJ0TB4VpS3O62CnKtugOKcXwHORspDtyhIS1gQbhQk",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "query {\n  allUsers {\n    id\n    mongoId\n    email\n    role\n    firstName\n    lastName\n    createdAt\n    updatedAt\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CreateUser",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1MjEyM30.InJ0TB4VpS3O62CnKtugOKcXwHORspDtyhIS1gQbhQk",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "mutation {\n  createUser(input: {\n    email: \"test@example.com\"\n    password: \"motdepasse\"\n    role: \"player\"\n    firstName: \"Jean\"\n    lastName: \"Dupont\"\n  }) {\n    user {\n      id\n      email\n      role\n      firstName\n      lastName\n    }\n    success\n    message\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetUserById",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1MjEyM30.InJ0TB4VpS3O62CnKtugOKcXwHORspDtyhIS1gQbhQk",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "query {\n  userById(userId: \"688de48f090b9dc997b6c0df\") {\n    id\n    email\n    role\n    firstName\n    lastName\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetUserByEmail",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1MjEyM30.InJ0TB4VpS3O62CnKtugOKcXwHORspDtyhIS1gQbhQk",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "query {\n  userByEmail(email: \"test@example.com\") {\n    id\n    email\n    role\n    firstName\n    lastName\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetSelfUser",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1MjEyM30.InJ0TB4VpS3O62CnKtugOKcXwHORspDtyhIS1gQbhQk",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "query {\n  me {\n    id\n    mongoId\n    email\n    role\n    firstName\n    lastName\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "UpdateUser",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1MjEyM30.InJ0TB4VpS3O62CnKtugOKcXwHORspDtyhIS1gQbhQk",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "mutation {\n  updateUser(userId: \"688e2ed9215cd23a5b17c4f4\", input: {\n    firstName: \"NouveauNom\"\n    lastName: \"NouveauPrenom\"\n    role: \"admin\"\n  }) {\n    user {\n      id\n      email\n      role\n      firstName\n      lastName\n    }\n    success\n    message\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "DeleteUser",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1MjEyM30.InJ0TB4VpS3O62CnKtugOKcXwHORspDtyhIS1gQbhQk",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "mutation {\n  deleteUser(userId: \"688e2ed9215cd23a5b17c4f4\") {\n    success\n    message\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Assets",
-			"item": [
-				{
-					"name": "CreateAsset",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1MjEyM30.InJ0TB4VpS3O62CnKtugOKcXwHORspDtyhIS1gQbhQk",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "mutation {\n  createAsset(input: {\n    type: \"image\"\n    name: \"Image de test\"\n    filename: \"test.jpg\"\n    url: \"https://cdn.example.com/test.jpg\"\n    fileSize: 123456\n    mimeType: \"image/jpeg\"\n    metadata: \"{\\\"width\\\": 800, \\\"height\\\": 600}\"\n    isPublic: true\n  }) {\n    asset {\n      id\n      name\n      type\n      url\n      isPublic\n      fileSizeMb\n      fileExtension\n      dimensions\n      duration\n    }\n    success\n    message\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "UpdateAsset",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NTc3M30.gv18MtPKpB-vSwEKr7mKLUEn8bIlXQxJ2nhbM5pi4N8",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "mutation {\n  updateAsset(assetId: \"688e3c25d92c134c4f9e8327\", input: {\n    name: \"Nom modifié\"\n    url: \"https://cdn.example.com/nouveau.jpg\"\n    metadata: \"{\\\"width\\\": 1024, \\\"height\\\": 768}\"\n    isPublic: false\n  }) {\n    asset {\n      id\n      name\n      url\n      isPublic\n    }\n    success\n    message\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "DeleteAsset",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NTc3M30.gv18MtPKpB-vSwEKr7mKLUEn8bIlXQxJ2nhbM5pi4N8",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "mutation {\n  deleteAsset(assetId: \"688e3c25d92c134c4f9e8327\") {\n    success\n    message\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetAllAssets",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NTc3M30.gv18MtPKpB-vSwEKr7mKLUEn8bIlXQxJ2nhbM5pi4N8",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "query {\n  allAssets {\n    id\n    mongoId\n    name\n    type\n    url\n    isPublic\n    uploadedBy {\n      id\n      email\n    }\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetAssetById",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NTc3M30.gv18MtPKpB-vSwEKr7mKLUEn8bIlXQxJ2nhbM5pi4N8",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "query {\n  assetById(assetId: \"688de490090b9dc997b6c0e1\") {\n    id\n    mongoId\n    name\n    type\n    url\n    isPublic\n    metadata\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetSelfAsset",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NTc3M30.gv18MtPKpB-vSwEKr7mKLUEn8bIlXQxJ2nhbM5pi4N8",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "query {\n  myAssets {\n    id\n    mongoId\n    name\n    url\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Progress",
-			"item": [
-				{
-					"name": "CreateProgress",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NzIzNX0.vjuyerZJBi5R2etSY6-3IdHw_p7PxwKiRuF6nz64Umk",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "mutation {\n  createProgress(input: {\n    scenarioId: \"688de491090b9dc997b6c0e2\"\n    currentSceneId: \"688de493090b9dc997b6c0e5\"\n  }) {\n    progress {\n      mongoId\n      scenarioId {\n        mongoId\n      }\n      currentSceneId {\n        mongoId\n        title\n      }\n      userId {\n        mongoId\n        email\n      }\n    }\n    success\n    message\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "UpdateProgress",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NzIzNX0.vjuyerZJBi5R2etSY6-3IdHw_p7PxwKiRuF6nz64Umk",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "mutation {\n  updateProgress(progressId: \"688e44dff3d80b37c88304bf\", input: {\n    currentSceneId: \"688de493090b9dc997b6c0e5\"\n    totalTimeSpent: 120\n  }) {\n    progress {\n      mongoId\n      scenarioId {\n        mongoId\n      }\n      currentSceneId {\n        mongoId\n        title\n      }\n      userId {\n        mongoId\n        email\n      }\n    }\n    success\n    message\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "DeleteProgress",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NzIzNX0.vjuyerZJBi5R2etSY6-3IdHw_p7PxwKiRuF6nz64Umk",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "mutation {\n  deleteProgress(progressId: \"688e44dff3d80b37c88304bf\") {\n    success\n    message\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetAllProgression",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NzIzNX0.vjuyerZJBi5R2etSY6-3IdHw_p7PxwKiRuF6nz64Umk",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "query {\n  allProgress {\n    mongoId\n    scenarioId {\n      id\n      # ou un autre champ comme name si disponible\n    }\n    userId {\n      mongoId\n      email\n    }\n    currentSceneId {\n      id\n      # ou un autre champ comme title si disponible\n    }\n    progressPercentage\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetSelfProgression",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE1NzIzNX0.vjuyerZJBi5R2etSY6-3IdHw_p7PxwKiRuF6nz64Umk",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "query {\n  myProgress {\n    mongoId\n    scenarioId {\n      id\n      # ou name, mongoId, etc. selon ce que tu exposes dans ScenarioType\n    }\n    currentSceneId {\n      id\n      # ou title, mongoId, etc. selon ce que tu exposes dans SceneType\n    }\n    progressPercentage\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Story",
-			"item": [
-				{
-					"name": "CreateScenario",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE2MjI1MX0.dYSU4fKXUxN7hz2S1-IBT0Ws21Ucz7n1KEEow2bj_X8",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "mutation {\n  createScenario(input: {\n    title: \"Mon scénario\"\n    description: \"Une histoire interactive\"\n    isPublished: true\n  }) {\n    scenario {\n      mongoId\n      title\n      description\n      isPublished\n    }\n    success\n    message\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "UpdateScenario",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE2MjI1MX0.dYSU4fKXUxN7hz2S1-IBT0Ws21Ucz7n1KEEow2bj_X8",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "mutation {\n  updateScenario(scenarioId: \"688e56d3876c28a4c383cfb0\", input: {\n    title: \"Titre modifié\"\n    description: \"Description modifiée\"\n    isPublished: true\n  }) {\n    scenario {\n      mongoId\n      title\n      description\n      isPublished\n    }\n    success\n    message\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CreateScene",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE2MjI1MX0.dYSU4fKXUxN7hz2S1-IBT0Ws21Ucz7n1KEEow2bj_X8",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "mutation {\n  createScene(input: {\n    scenarioId: \"688e56d3876c28a4c383cfb0\"\n    title: \"Choix 2 première scène\"\n    text: \"Choix 2 première scène\"\n    order: 3\n    isStartScene: false\n    isEndScene: false\n    # imageId: \"<ASSET_ID>\" (optionnel)\n    # soundId: \"<ASSET_ID>\" (optionnel)\n  }) {\n    scene {\n      mongoId\n      title\n      text\n      order\n      isStartScene\n      isEndScene\n    }\n    success\n    message\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CreateChoice",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE2MjI1MX0.dYSU4fKXUxN7hz2S1-IBT0Ws21Ucz7n1KEEow2bj_X8",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "mutation {\n  createChoice(input: {\n    fromSceneId: \"688e5944876c28a4c383cfb1\"\n    toSceneId: \"688e59c2876c28a4c383cfb3\"\n    text: \"Aller à la scène suivante choix 2\"\n    order: 2\n    # condition: \"{\\\"score\\\": 10}\" (optionnel)\n  }) {\n    choice {\n      mongoId\n      text\n      order\n      fromSceneId {\n        mongoId\n        title\n      }\n      toSceneId {\n        mongoId\n        title\n      }\n    }\n    success\n    message\n  }\n} ",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetAllScenario",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4ZGU0OGYwOTBiOWRjOTk3YjZjMGRkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc1NDE2MjI1MX0.dYSU4fKXUxN7hz2S1-IBT0Ws21Ucz7n1KEEow2bj_X8",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "query {\n  allScenarios {\n    mongoId\n    title\n    description\n    isPublished\n  }\n}",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/graphql/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"graphql",
-								""
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Login",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "graphql",
-					"graphql": {
-						"query": "mutation {\n  login(email: \"admin@example.com\", password: \"admin123\") {\n    token\n    success\n    message\n  }\n}",
-						"variables": ""
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8000/graphql/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"graphql",
-						""
-					]
-				}
-			},
-			"response": []
-		}
-	]
+  "info": {
+    "_postman_id": "6eb266fb-9220-4a5e-835f-f1bea3d66dcc",
+    "name": "VEH",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "24414357"
+  },
+  "item": [
+    {
+      "name": "Authentification",
+      "item": [
+        {
+          "name": "Login - Admin",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  login(email: \"admin@example.com\", password: \"admin123\") {\n    token\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Connexion en tant qu'administrateur pour obtenir le token JWT"
+          }
+        },
+        {
+          "name": "Login - Player1",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  login(email: \"player1@example.com\", password: \"player123\") {\n    token\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Connexion en tant que Player1 (Alice) pour obtenir le token JWT"
+          }
+        },
+        {
+          "name": "Login - Player2",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  login(email: \"player2@example.com\", password: \"player123\") {\n    token\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Connexion en tant que Player2 (Bob) pour obtenir le token JWT"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Utilisateurs",
+      "item": [
+        {
+          "name": "CreateUser - Admin",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createUser(input: {\n    email: \"admin@example.com\"\n    password: \"admin123\"\n    role: \"admin\"\n    firstName: \"Admin\"\n    lastName: \"User\"\n  }) {\n    user {\n      id\n      mongoId\n      email\n      role\n      firstName\n      lastName\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Créer l'utilisateur admin (comme dans seed_data.py)"
+          }
+        },
+        {
+          "name": "CreateUser - Player1",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createUser(input: {\n    email: \"player1@example.com\"\n    password: \"player123\"\n    role: \"player\"\n    firstName: \"Alice\"\n    lastName: \"Joueur\"\n  }) {\n    user {\n      id\n      mongoId\n      email\n      role\n      firstName\n      lastName\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Créer le joueur 1 - Alice"
+          }
+        },
+        {
+          "name": "CreateUser - Player2",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createUser(input: {\n    email: \"player2@example.com\"\n    password: \"player123\"\n    role: \"player\"\n    firstName: \"Bob\"\n    lastName: \"Joueur\"\n  }) {\n    user {\n      id\n      mongoId\n      email\n      role\n      firstName\n      lastName\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Créer le joueur 2 - Bob"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Scénario - Le Château Oublié",
+      "item": [
+        {
+          "name": "CreateScenario - Le Château Oublié",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createScenario(input: {\n    title: \"Le Château Oublié\"\n    description: \"Une aventure épique dans les ruines d'un ancien château rempli de mystères\"\n    isPublished: true\n  }) {\n    scenario {\n      id\n      mongoId\n      title\n      description\n      isPublished\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Créer le scénario principal 'Le Château Oublié'"
+          }
+        },
+        {
+          "name": "CreateScene - 1. L'entrée du château",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createScene(input: {\n    scenarioId: \"{{scenario_id}}\"\n    title: \"L'entrée du château\"\n    text: \"Vous vous trouvez devant les ruines d'un ancien château. Les murs de pierre sont recouverts de lierre et de mousse. Une grande porte en bois se dresse devant vous, partiellement ouverte.\"\n    order: 1\n    isStartScene: true\n    isEndScene: false\n    autoGenerateImage: true\n    autoGenerateSound: true\n    autoGenerateMusic: false\n  }) {\n    scene {\n      id\n      mongoId\n      title\n      text\n      order\n      isStartScene\n      isEndScene\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Scène de début - L'entrée du château"
+          }
+        },
+        {
+          "name": "CreateScene - 2. Le grand hall",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createScene(input: {\n    scenarioId: \"{{scenario_id}}\"\n    title: \"Le grand hall\"\n    text: \"Vous pénétrez dans un vaste hall aux plafonds voûtés. Des torches vacillantes projettent des ombres dansantes sur les murs de pierre. Des statues de chevaliers semblent vous observer depuis les recoins.\"\n    order: 2\n    isStartScene: false\n    isEndScene: false\n    autoGenerateImage: true\n    autoGenerateSound: true\n    autoGenerateMusic: false\n  }) {\n    scene {\n      id\n      mongoId\n      title\n      text\n      order\n      isStartScene\n      isEndScene\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Scène 2 - Le grand hall"
+          }
+        },
+        {
+          "name": "CreateScene - 3. Les donjons souterrains",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createScene(input: {\n    scenarioId: \"{{scenario_id}}\"\n    title: \"Les donjons souterrains\"\n    text: \"Vous descendez un escalier de pierre étroit et humide. L'air est froid et chargé d'humidité. Des gouttes d'eau résonnent dans l'obscurité, créant une atmosphère oppressante.\"\n    order: 3\n    isStartScene: false\n    isEndScene: false\n    autoGenerateImage: false\n    autoGenerateSound: false\n    autoGenerateMusic: false\n  }) {\n    scene {\n      id\n      mongoId\n      title\n      text\n      order\n      isStartScene\n      isEndScene\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Scène 3 - Les donjons souterrains"
+          }
+        },
+        {
+          "name": "CreateScene - 4. La bibliothèque secrète",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createScene(input: {\n    scenarioId: \"{{scenario_id}}\"\n    title: \"La bibliothèque secrète\"\n    text: \"Vous découvrez une bibliothèque secrète remplie de livres anciens. Des rayons de lumière filtrant par les fenêtres éclairent des étagères poussiéreuses. Des grimoires aux couvertures dorées semblent appeler votre attention.\"\n    order: 4\n    isStartScene: false\n    isEndScene: false\n    autoGenerateImage: true\n    autoGenerateSound: true\n    autoGenerateMusic: false\n  }) {\n    scene {\n      id\n      mongoId\n      title\n      text\n      order\n      isStartScene\n      isEndScene\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Scène 4 - La bibliothèque secrète"
+          }
+        },
+        {
+          "name": "CreateScene - 5. La salle du trône",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createScene(input: {\n    scenarioId: \"{{scenario_id}}\"\n    title: \"La salle du trône\"\n    text: \"Vous pénétrez dans une immense salle du trône. Un trône en pierre imposant domine la pièce, entouré de bannières anciennes qui flottent dans l'air. Des échos lointains résonnent, créant une atmosphère à la fois majestueuse et inquiétante.\"\n    order: 5\n    isStartScene: false\n    isEndScene: true\n    autoGenerateImage: true\n    autoGenerateSound: true\n    autoGenerateMusic: false\n  }) {\n    scene {\n      id\n      mongoId\n      title\n      text\n      order\n      isStartScene\n      isEndScene\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Scène de fin - La salle du trône"
+          }
+        },
+        {
+          "name": "UpdateScene - Modifier une scène",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  updateScene(sceneId: \"{{scene_2_id}}\", input: {\n    title: \"Le grand hall (modifié)\"\n    text: \"Vous pénétrez dans un vaste hall aux plafonds voûtés. Des torches vacillantes projettent des ombres dansantes sur les murs de pierre. Des statues de chevaliers semblent vous observer depuis les recoins. [TEXTE MODIFIÉ]\"\n    order: 2\n  }) {\n    scene {\n      id\n      mongoId\n      title\n      text\n      order\n      isStartScene\n      isEndScene\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Modifier une scène existante"
+          }
+        },
+        {
+          "name": "DeleteScene - Supprimer une scène",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  deleteScene(sceneId: \"{{scene_4_id}}\") {\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Supprimer une scène et tous ses choix associés"
+          }
+        },
+        {
+          "name": "UpdateScenario - Modifier un scénario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  updateScenario(scenarioId: \"{{scenario_id}}\", input: {\n    title: \"Le Château Oublié (Édition Spéciale)\"\n    description: \"Une aventure épique dans les ruines d'un ancien château rempli de mystères - Version mise à jour\"\n    isPublished: true\n  }) {\n    scenario {\n      id\n      mongoId\n      title\n      description\n      isPublished\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Modifier un scénario existant"
+          }
+        },
+        {
+          "name": "DeleteScenario - Supprimer un scénario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  deleteScenario(scenarioId: \"{{scenario_id}}\") {\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Supprimer un scénario complet et toutes ses dépendances (scènes, choix)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Choix (Choices)",
+      "item": [
+        {
+          "name": "CreateChoice - Entrée → Grand hall",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createChoice(input: {\n    fromSceneId: \"{{scene_1_id}}\"\n    toSceneId: \"{{scene_2_id}}\"\n    text: \"Pénétrer dans le grand hall\"\n    order: 1\n  }) {\n    choice {\n      id\n      mongoId\n      text\n      order\n      fromSceneId {\n        mongoId\n        title\n      }\n      toSceneId {\n        mongoId\n        title\n      }\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Choice depuis l'entrée vers le grand hall"
+          }
+        },
+        {
+          "name": "CreateChoice - Entrée → Donjons",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createChoice(input: {\n    fromSceneId: \"{{scene_1_id}}\"\n    toSceneId: \"{{scene_3_id}}\"\n    text: \"Explorer les donjons\"\n    order: 2\n  }) {\n    choice {\n      id\n      mongoId\n      text\n      order\n      fromSceneId {\n        mongoId\n        title\n      }\n      toSceneId {\n        mongoId\n        title\n      }\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Choice depuis l'entrée vers les donjons"
+          }
+        },
+        {
+          "name": "CreateChoice - Grand hall → Bibliothèque",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createChoice(input: {\n    fromSceneId: \"{{scene_2_id}}\"\n    toSceneId: \"{{scene_4_id}}\"\n    text: \"Chercher une bibliothèque\"\n    order: 1\n  }) {\n    choice {\n      id\n      mongoId\n      text\n      order\n      fromSceneId {\n        mongoId\n        title\n      }\n      toSceneId {\n        mongoId\n        title\n      }\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Choice depuis le grand hall vers la bibliothèque"
+          }
+        },
+        {
+          "name": "CreateChoice - Donjons → Salle du trône",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createChoice(input: {\n    fromSceneId: \"{{scene_3_id}}\"\n    toSceneId: \"{{scene_5_id}}\"\n    text: \"Remonter vers la salle du trône\"\n    order: 1\n  }) {\n    choice {\n      id\n      mongoId\n      text\n      order\n      fromSceneId {\n        mongoId\n        title\n      }\n      toSceneId {\n        mongoId\n        title\n      }\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Choice depuis les donjons vers la salle du trône"
+          }
+        },
+        {
+          "name": "CreateChoice - Bibliothèque → Salle du trône",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createChoice(input: {\n    fromSceneId: \"{{scene_4_id}}\"\n    toSceneId: \"{{scene_5_id}}\"\n    text: \"Sortir vers la salle du trône\"\n    order: 1\n  }) {\n    choice {\n      id\n      mongoId\n      text\n      order\n      fromSceneId {\n        mongoId\n        title\n      }\n      toSceneId {\n        mongoId\n        title\n      }\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Choice depuis la bibliothèque vers la salle du trône"
+          }
+        },
+        {
+          "name": "UpdateChoice - Modifier un choix",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  updateChoice(choiceId: \"{{choice_id}}\", input: {\n    text: \"Pénétrer dans le grand hall (modifié)\"\n    order: 1\n    toSceneId: \"{{scene_2_id}}\"\n  }) {\n    choice {\n      id\n      mongoId\n      text\n      order\n      fromSceneId {\n        mongoId\n        title\n      }\n      toSceneId {\n        mongoId\n        title\n      }\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Modifier un choix existant"
+          }
+        },
+        {
+          "name": "DeleteChoice - Supprimer un choix",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  deleteChoice(choiceId: \"{{choice_id}}\") {\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Supprimer un choix"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Progressions",
+      "item": [
+        {
+          "name": "CreateProgress - Player1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{player1_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createProgress(input: {\n    scenarioId: \"{{scenario_id}}\"\n    currentSceneId: \"{{scene_1_id}}\"\n  }) {\n    progress {\n      id\n      mongoId\n      scenarioId {\n        mongoId\n        title\n      }\n      currentSceneId {\n        mongoId\n        title\n      }\n      userId {\n        mongoId\n        email\n      }\n      progressPercentage\n      totalTimeSpent\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Créer une progression pour player1 (Alice) - commence à la scène de début"
+          }
+        },
+        {
+          "name": "CreateProgress - Player2",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{player2_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createProgress(input: {\n    scenarioId: \"{{scenario_id}}\"\n    currentSceneId: \"{{scene_1_id}}\"\n  }) {\n    progress {\n      id\n      mongoId\n      scenarioId {\n        mongoId\n        title\n      }\n      currentSceneId {\n        mongoId\n        title\n      }\n      userId {\n        mongoId\n        email\n      }\n      progressPercentage\n      totalTimeSpent\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Créer une progression pour player2 (Bob) - commence à la scène de début"
+          }
+        },
+        {
+          "name": "RecordProgress - Avancer dans le scénario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{player_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  recordProgress(input: {\n    progressId: \"{{progress_id}}\"\n    sceneId: \"{{scene_2_id}}\"\n    choiceId: \"{{choice_id}}\"\n    metadata: {\n      timestamp: \"2025-01-15T10:30:00Z\"\n    }\n  }) {\n    progress {\n      id\n      mongoId\n      currentSceneId {\n        mongoId\n        title\n      }\n      history {\n        sceneId {\n          mongoId\n          title\n        }\n        choiceId {\n          mongoId\n          text\n        }\n        timestamp\n      }\n      progressPercentage\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Enregistrer un choix et avancer dans le scénario"
+          }
+        },
+        {
+          "name": "GoBackInHistory - Retour en arrière",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{player_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  goBackInHistory(progressId: \"{{progress_id}}\", stepsBack: 1) {\n    progress {\n      id\n      mongoId\n      currentSceneId {\n        mongoId\n        title\n        text\n      }\n      history {\n        sceneId {\n          mongoId\n          title\n        }\n        choiceId {\n          mongoId\n          text\n        }\n        timestamp\n      }\n      progressPercentage\n      isCompleted\n    }\n    success\n    message\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Revenir en arrière de N pas dans l'historique de progression"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Requêtes de lecture",
+      "item": [
+        {
+          "name": "GetAllScenarios",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  allScenarios {\n    id\n    mongoId\n    title\n    description\n    isPublished\n    scenesList {\n      id\n      mongoId\n      title\n      order\n      isStartScene\n      isEndScene\n    }\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Récupérer tous les scénarios"
+          }
+        },
+        {
+          "name": "GetMyProgress",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT {{player_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  myProgress {\n    id\n    mongoId\n    scenarioId {\n      id\n      mongoId\n      title\n    }\n    currentSceneId {\n      id\n      mongoId\n      title\n      text\n      order\n    }\n    progressPercentage\n    totalTimeSpent\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql", ""]
+            },
+            "description": "Récupérer la progression du joueur connecté"
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "admin_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "player_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "player1_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "player2_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "scenario_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "scene_1_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "scene_2_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "scene_3_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "scene_4_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "scene_5_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "choice_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "progress_id",
+      "value": "",
+      "type": "string"
+    }
+  ]
 }

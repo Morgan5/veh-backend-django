@@ -15,7 +15,7 @@ Backend Django pour une application de livre dont vous êtes le héros, connect�
 
 ## 🛠️ Stack Technique
 
-- **Django 4.2** : Framework web Python
+- **Django 4.2.23** : Framework web Python
 - **MongoDB Atlas** : Base de données NoSQL
 - **MongoEngine** : ODM pour MongoDB
 - **GraphQL** : API moderne avec graphene-django
@@ -28,45 +28,37 @@ Backend Django pour une application de livre dont vous êtes le héros, connect�
 - MongoDB Atlas (ou MongoDB local)
 - pip
 
+### Prérequis optionnels pour la génération IA
+
+- **Pour les images** : Token Hugging Face (requis pour générer des images)
+- **Pour la musique** :
+  - GPU recommandé (NVidia avec CUDA) pour des temps de génération rapides
+  - Au moins 8GB RAM
+  - ~3GB d'espace disque libre pour le modèle MusicGen
+
 ## 🔧 Installation
 
 1. **Cloner le projet**
+
 ```bash
 git clone <repository-url>
-cd backend-django
+cd veh-backend-django
 ```
 
 2. **Installer les dépendances**
+
 ```bash
 pip install -r requirements.txt
 ```
 
 3. **Configurer les variables d'environnement**
+
 ```bash
 cp env.example .env
 ```
 
-Éditer le fichier `.env` avec ces configurations :
-```env
-# Django Settings
-DEBUG=True
-SECRET_KEY=your-secret-key-here-change-in-production
-ALLOWED_HOSTS=localhost,127.0.0.1
+4. **Lancer le serveur de développement**
 
-# MongoDB Atlas Settings
-MONGODB_URI=mongodb+srv://morganrajaonarivony5:morgan1234@cluster0.c480fh7.mongodb.net/veh_tpi?retryWrites=true&w=majority&appName=Cluster0
-MONGODB_DB_NAME=veh_tpi
-
-# JWT Settings
-JWT_SECRET_KEY=your-jwt-secret-key-here
-JWT_ALGORITHM=HS256
-JWT_EXPIRATION_DELTA=3600
-
-# CORS Settings
-CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000 
-```
-
-5. **Lancer le serveur de développement**
 ```bash
 python manage.py runserver
 ```
@@ -85,31 +77,49 @@ python manage.py runserver
 ## 🔌 API GraphQL
 
 ### Endpoint
-- **GraphQL Playground** : `http://localhost:8000/graphql/`
-- **A importer dans postman pour tester les endpoints GraphQL** : voir `VEH.postman_collection.json`
 
+- **GraphiQL Interface** : `http://localhost:8000/graphql/` (interface interactive pour tester l'API)
+- **Collection Postman** : Importer `VEH.postman_collection.json` dans Postman pour tester les endpoints GraphQL
 
 ## 📱 Applications Django
 
 ### 1. **users** - Gestion des utilisateurs
+
 - Modèle User avec rôles admin/player
 - Authentification JWT
 - Hachage sécurisé des mots de passe
 
 ### 2. **stories** - Scénarios narratifs
+
 - Modèles Scenario, Scene, Choice
 - Relations entre scènes et choix
 - Gestion des auteurs
 
 ### 3. **progress** - Suivi de progression
+
 - Modèle PlayerProgress
 - Historique des choix
 - Calcul de progression
 
 ### 4. **assets** - Gestion des médias
+
 - Modèle Asset pour images/sons
 - Métadonnées des fichiers
-- Génération d'assets (placeholder IA)
+- **Génération d'assets via IA** ✨
+  - Images générées via Hugging Face Stable Diffusion
+  - Sons générés via gTTS (Text-to-Speech) et MusicGen pour la musique d'ambiance
+  - Génération automatique lors de la création de scènes (via les flags `auto_generate_image`, `auto_generate_sound`, `auto_generate_music`)
+  - Mutation `generate_asset` disponible pour générer manuellement des assets
+
+#### 📌 Modes de génération IA disponibles
+
+Le système supporte 3 types de génération :
+
+1. **Images** (nécessite `HUGGINGFACE_API_TOKEN`) : Générées via Hugging Face API
+2. **Voix/TTS** (aucune config requise) : Génération vocale gratuite via gTTS
+3. **Musique d'ambiance** (optionnel) : Génération locale via MusicGen
+
+> **Note importante** : La génération musicale fonctionne localement et nécessite des ressources importantes. Si vous n'avez pas de GPU ou si vous ne souhaitez pas utiliser cette fonctionnalité, le système continuera de fonctionner normalement. La génération de musique retournera une erreur explicite si les dépendances requises ne sont pas installées.
 
 ## 🔒 Sécurité
 
@@ -121,6 +131,7 @@ python manage.py runserver
 ## 🚀 Déploiement
 
 ### Variables d'environnement de production
+
 ```env
 DEBUG=False
 SECRET_KEY=your-production-secret-key
@@ -129,17 +140,77 @@ MONGODB_URI=your-production-mongodb-uri
 ```
 
 ### Commandes de déploiement
+
 ```bash
+# Collecter les fichiers statiques (si nécessaire)
 python manage.py collectstatic
-python manage.py migrate
+
+# Note: MongoDB/MongoEngine n'utilise pas de migrations Django
+# Les collections sont créées automatiquement lors de la première utilisation
+
+# Lancer le serveur avec Gunicorn
 gunicorn interactive_story_backend.wsgi:application
 ```
 
+### Installation
+
+Toutes les dépendances pour la génération IA sont déjà dans `requirements.txt`. L'installation standard suffit :
+
+```bash
+pip install -r requirements.txt
+```
+
+### Configuration
+
+**Pour les images** (requis si vous voulez générer des images) :
+
+1. Créez un compte sur [Hugging Face](https://huggingface.co/)
+2. Générez un token d'accès dans vos paramètres
+3. Ajoutez `HUGGINGFACE_API_TOKEN=votre_token` dans votre `.env`
+4. Optionnel : Configurez le modèle d'image avec `HF_IMAGE_MODEL` (défaut: `stabilityai/stable-diffusion-xl-base-1.0`)
+
+**Pour la musique** (optionnel) :
+
+- Le système détecte automatiquement si les bibliothèques ML (`transformers`, `torch`) sont installées
+- Si non, la génération musicale est désactivée avec un message d'erreur clair
+- Optionnel : Configurez le modèle MusicGen avec `MUSICGEN_MODEL` (défaut: `facebook/musicgen-small`)
+
+### Premier démarrage - Téléchargement des modèles
+
+Lors de la **première** génération de musique :
+
+- Le modèle MusicGen sera automatiquement téléchargé depuis Hugging Face
+- Taille : ~3GB pour `musicgen-small`
+- Temps : 10-15 minutes selon la connexion
+- Cache : Le modèle est mis en cache pour les utilisations suivantes
+
+### Performance
+
+**Génération musicale** :
+
+- **Avec GPU** : ~1-2 minutes pour 30s de musique
+- **Avec CPU** : ~5-10 minutes pour 30s de musique
+- **Recommandation** : Utiliser GPU ou éviter cette fonctionnalité en production
+
+**Autres générations** :
+
+- Images : ~10-30 secondes (dépend de l'API Hugging Face)
+- TTS : ~1-5 secondes (très rapide)
+
+### Conseils pour les développeurs
+
+Si vous ne souhaitez **pas** utiliser la génération musicale :
+
+- Le système fonctionne parfaitement sans GPU
+- Les fonctionnalités images et TTS restent disponibles
+- Les erreurs de génération musicale n'affectent pas le reste de l'API
+- Vous pouvez uploader vos propres fichiers via `create_asset`
+
 ## 📊 Monitoring et Debug
 
-- **GraphQL Playground** : Interface interactive pour tester l'API
-- **Debug GraphQL** : Query `__debug` disponible en développement
-- **Logs Django** : Logs détaillés des requêtes
+- **GraphiQL Interface** : Interface interactive disponible à `http://localhost:8000/graphql/`
+- **Logs Django** : Logs détaillés des requêtes via la console
+- **Collection Postman** : Utiliser `VEH.postman_collection.json` pour tester toutes les mutations et queries
 
 ## 🤝 Contribution
 
@@ -151,4 +222,4 @@ gunicorn interactive_story_backend.wsgi:application
 
 ## 📄 Licence
 
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+Ce projet est sous licence MIT.
