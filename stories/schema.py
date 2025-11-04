@@ -5,6 +5,7 @@ from .models import Scenario, Scene, Choice
 import os
 import jwt
 from users.models import User
+from graphene import List, ID
 
 
 class ScenarioType(MongoengineObjectType):
@@ -723,6 +724,48 @@ class DeleteChoice(graphene.Mutation):
         except Exception as e:
             return DeleteChoice(success=False, message=str(e))
 
+class DeleteChoices(graphene.Mutation):
+    """
+    Mutation pour supprimer plusieurs choix
+    """
+
+    class Arguments:
+        choice_ids = List(ID, required=True)
+
+    success = graphene.Boolean()
+    message = graphene.String()
+
+    def mutate(self, info, choice_ids):
+        user = get_user_from_context(info)
+        if not user:
+            raise Exception("Authentication required")
+
+        try:
+            deleted_count = 0
+            for choice_id in choice_ids:
+                choice = Choice.objects(id=choice_id).first()
+
+                if not choice:
+                    continue  # ou logguer l'erreur
+
+                if str(choice.from_scene_id.scenario_id.author_id.id) != str(user.id):
+                    continue  # ou logguer l'erreur
+
+                from_scene = choice.from_scene_id
+                if choice in from_scene.choices:
+                    from_scene.choices.remove(choice)
+                    from_scene.save()
+
+                choice.delete()
+                deleted_count += 1
+
+            if deleted_count == 0:
+                return DeleteChoices(success=False, message="Aucun choix supprimé")
+
+            return DeleteChoices(success=True, message=f"{deleted_count} choix supprimés avec succès")
+        except Exception as e:
+            return DeleteChoices(success=False, message=str(e))
+
 
 # Queries
 class Query(graphene.ObjectType):
@@ -791,7 +834,7 @@ class Mutation(graphene.ObjectType):
     create_choice = CreateChoice.Field()
     update_choice = UpdateChoice.Field()
     delete_choice = DeleteChoice.Field()
-
+    deleteChoices = DeleteChoices.Field()
 
 def get_user_from_context(info):
     auth = info.context.META.get("HTTP_AUTHORIZATION", "")
