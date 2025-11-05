@@ -43,7 +43,7 @@ class ImageGenerationService:
         self.default_model = config(
             "HF_IMAGE_MODEL", default="stabilityai/stable-diffusion-xl-base-1.0"
         )
-        self.base_url = "https://api-inference.huggingface.co/models"
+        self.base_url = "https://router.huggingface.co/hf-inference/models"
 
     def generate(
         self, prompt: str, negative_prompt: Optional[str] = None
