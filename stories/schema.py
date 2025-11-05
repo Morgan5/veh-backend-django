@@ -6,6 +6,7 @@ import os
 import jwt
 from users.models import User
 from graphene import List, ID
+import base64
 
 
 class ScenarioType(MongoengineObjectType):
@@ -29,9 +30,46 @@ class ScenarioType(MongoengineObjectType):
         return list(parent.scenes) if parent.scenes else []
 
 
+def get_asset_from_id(asset_id):
+    """
+    Récupère un Asset à partir d'un ID GraphQL ou mongoId
+    Gère les deux formats : ID GraphQL encodé (base64) ou mongoId direct
+    """
+    from assets.models import Asset
+    
+    if not asset_id:
+        return None
+    
+    # Essayer d'abord avec l'ID tel quel (mongoId direct)
+    asset = Asset.objects(id=asset_id).first()
+    if asset:
+        return asset
+    
+    # Si pas trouvé, essayer de décoder un ID GraphQL (format: "TypeName:mongoid" encodé en base64)
+    try:
+        # Décoder le base64
+        decoded = base64.b64decode(asset_id).decode('utf-8')
+        # Format attendu: "AssetType:mongoid"
+        if ':' in decoded:
+            _, mongo_id = decoded.split(':', 1)
+            asset = Asset.objects(id=mongo_id).first()
+            if asset:
+                return asset
+    except Exception:
+        # Si le décodage échoue, l'ID n'est pas au format GraphQL encodé
+        pass
+    
+    # Si toujours pas trouvé, retourner None
+    return None
+
+
 class SceneType(MongoengineObjectType):
     mongo_id = graphene.String()
     choices = graphene.List(lambda: ChoiceType)
+    # Exposer explicitement les assets
+    image_id = graphene.Field("assets.schema.AssetType")
+    sound_id = graphene.Field("assets.schema.AssetType")
+    music_id = graphene.Field("assets.schema.AssetType")
 
     class Meta:
         model = Scene
@@ -43,6 +81,24 @@ class SceneType(MongoengineObjectType):
 
     def resolve_choices(parent, info):
         return Choice.objects(from_scene_id=parent.id)
+
+    def resolve_image_id(parent, info):
+        """Retourner l'asset image si présent"""
+        if parent.image_id:
+            return parent.image_id
+        return None
+
+    def resolve_sound_id(parent, info):
+        """Retourner l'asset son (TTS) si présent"""
+        if parent.sound_id:
+            return parent.sound_id
+        return None
+
+    def resolve_music_id(parent, info):
+        """Retourner l'asset musique d'ambiance si présent"""
+        if parent.music_id:
+            return parent.music_id
+        return None
 
 
 class ChoiceType(MongoengineObjectType):
@@ -231,17 +287,37 @@ class CreateScene(graphene.Mutation):
 
             # Ajouter les assets si fournis manuellement
             if input.image_id:
-                from assets.models import Asset
-
-                scene.image_id = Asset.objects(id=input.image_id).first()
+                asset_image = get_asset_from_id(input.image_id)
+                if asset_image:
+                    scene.image_id = asset_image
+                else:
+                    return CreateScene(
+                        scene=None,
+                        success=False,
+                        message=f"Asset image non trouvé avec l'ID: {input.image_id}",
+                    )
+            
             if input.sound_id:
-                from assets.models import Asset
-
-                scene.sound_id = Asset.objects(id=input.sound_id).first()
+                asset_sound = get_asset_from_id(input.sound_id)
+                if asset_sound:
+                    scene.sound_id = asset_sound
+                else:
+                    return CreateScene(
+                        scene=None,
+                        success=False,
+                        message=f"Asset son non trouvé avec l'ID: {input.sound_id}",
+                    )
+            
             if input.music_id:
-                from assets.models import Asset
-
-                scene.music_id = Asset.objects(id=input.music_id).first()
+                asset_music = get_asset_from_id(input.music_id)
+                if asset_music:
+                    scene.music_id = asset_music
+                else:
+                    return CreateScene(
+                        scene=None,
+                        success=False,
+                        message=f"Asset musique non trouvé avec l'ID: {input.music_id}",
+                    )
 
             # Génération automatique d'assets via IA si demandé
             if input.auto_generate_image and not scene.image_id:
@@ -483,26 +559,44 @@ class UpdateScene(graphene.Mutation):
 
             # Gérer les assets
             if input.image_id is not None:
-                from assets.models import Asset
-
                 if input.image_id:
-                    scene.image_id = Asset.objects(id=input.image_id).first()
+                    asset_image = get_asset_from_id(input.image_id)
+                    if asset_image:
+                        scene.image_id = asset_image
+                    else:
+                        return UpdateScene(
+                            scene=None,
+                            success=False,
+                            message=f"Asset image non trouvé avec l'ID: {input.image_id}",
+                        )
                 else:
                     scene.image_id = None
 
             if input.sound_id is not None:
-                from assets.models import Asset
-
                 if input.sound_id:
-                    scene.sound_id = Asset.objects(id=input.sound_id).first()
+                    asset_sound = get_asset_from_id(input.sound_id)
+                    if asset_sound:
+                        scene.sound_id = asset_sound
+                    else:
+                        return UpdateScene(
+                            scene=None,
+                            success=False,
+                            message=f"Asset son non trouvé avec l'ID: {input.sound_id}",
+                        )
                 else:
                     scene.sound_id = None
 
             if input.music_id is not None:
-                from assets.models import Asset
-
                 if input.music_id:
-                    scene.music_id = Asset.objects(id=input.music_id).first()
+                    asset_music = get_asset_from_id(input.music_id)
+                    if asset_music:
+                        scene.music_id = asset_music
+                    else:
+                        return UpdateScene(
+                            scene=None,
+                            success=False,
+                            message=f"Asset musique non trouvé avec l'ID: {input.music_id}",
+                        )
                 else:
                     scene.music_id = None
 

@@ -21,11 +21,14 @@ from django.views.decorators.csrf import csrf_exempt
 from graphene_django.views import GraphQLView
 from django.conf import settings
 from django.conf.urls.static import static
+from assets.views import upload_file
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     # GraphQL endpoint
     path("graphql/", csrf_exempt(GraphQLView.as_view(graphiql=True))),
+    # REST endpoint pour upload de fichiers
+    path("api/upload/", upload_file, name="upload_file"),
 ]
 
 # Serve media files in development

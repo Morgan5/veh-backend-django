@@ -16,6 +16,7 @@ class AssetType(MongoengineObjectType):
     file_extension = graphene.String()
     dimensions = graphene.String()
     duration = graphene.String()
+    full_url = graphene.String()
 
     class Meta:
         model = Asset
@@ -40,6 +41,16 @@ class AssetType(MongoengineObjectType):
 
     def resolve_mongo_id(parent, info):
         return str(parent.id)
+
+    def resolve_full_url(self, info):
+        """Retourner l'URL complète avec le domaine du serveur"""
+        request = info.context
+        if request and hasattr(request, 'get_host'):
+            scheme = 'https' if request.is_secure() else 'http'
+            host = request.get_host()
+            return f"{scheme}://{host}{self.url}"
+        # Fallback si pas de contexte de requête
+        return f"http://localhost:8000{self.url}"
 
 
 # Input types
