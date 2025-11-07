@@ -467,10 +467,10 @@ def get_user_from_context(info):
 def delete_asset_with_file(asset):
     """
     Supprime un asset de la base de données et son fichier physique
-    
+
     Args:
         asset: Instance d'Asset à supprimer
-        
+
     Returns:
         tuple: (success: bool, message: str)
     """
@@ -478,13 +478,14 @@ def delete_asset_with_file(asset):
         # Supprimer le fichier physique si l'asset a un filename
         if asset and asset.filename:
             from .services import AssetStorageService
+
             storage_service = AssetStorageService()
             storage_service.delete_file(asset.filename)
-        
+
         # Supprimer l'asset de la base de données
         if asset:
             asset.delete()
-        
+
         return True, "Asset supprimé avec succès"
     except Exception as e:
         return False, f"Erreur lors de la suppression de l'asset: {str(e)}"

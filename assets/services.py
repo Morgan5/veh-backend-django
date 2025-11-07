@@ -110,7 +110,12 @@ class ImageGenerationService:
                 # Essayer de parser le JSON, sinon utiliser le texte brut
                 try:
                     error_data = response.json()
-                    error_msg = error_data.get("error", error_data.get("message", "Erreur lors de la génération de l'image"))
+                    error_msg = error_data.get(
+                        "error",
+                        error_data.get(
+                            "message", "Erreur lors de la génération de l'image"
+                        ),
+                    )
                 except (ValueError, json.JSONDecodeError):
                     # Si ce n'est pas du JSON, utiliser le texte brut ou le status code
                     error_msg = response.text or f"Erreur HTTP {response.status_code}"
@@ -372,7 +377,7 @@ class AssetStorageService:
             True si le fichier a été supprimé, False s'il n'existait pas
         """
         filepath = os.path.join(self.media_root, filename)
-        
+
         if os.path.exists(filepath):
             try:
                 os.remove(filepath)
