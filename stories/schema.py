@@ -60,6 +60,7 @@ class ChoiceType(MongoengineObjectType):
     def resolve_to_scene_id(parent, info):
         return Scene.objects(id=parent.to_scene_id.id).first()
 
+
 # Input types
 class CreateScenarioInput(graphene.InputObjectType):
     title = graphene.String(required=True)
@@ -102,6 +103,10 @@ class UpdateSceneInput(graphene.InputObjectType):
     music_id = graphene.ID()  # Asset musique d'ambiance
     is_start_scene = graphene.Boolean()
     is_end_scene = graphene.Boolean()
+    # Options pour générer automatiquement les assets via IA
+    auto_generate_image = graphene.Boolean(default_value=False)
+    auto_generate_sound = graphene.Boolean(default_value=False)
+    auto_generate_music = graphene.Boolean(default_value=False)
 
 
 class CreateChoiceInput(graphene.InputObjectType):
@@ -506,6 +511,134 @@ class UpdateScene(graphene.Mutation):
                 else:
                     scene.music_id = None
 
+            # Génération automatique d'assets via IA si demandé
+            if input.auto_generate_image and not scene.image_id:
+                try:
+                    from assets.services import (
+                        ImageGenerationService,
+                        AssetStorageService,
+                    )
+                    from assets.models import Asset
+                    import uuid
+
+                    image_service = ImageGenerationService()
+                    storage_service = AssetStorageService()
+
+                    # Utiliser le texte de la scène comme prompt pour l'image
+                    prompt = f"{scene.title}. {scene.text}"
+                    image_bytes, metadata = image_service.generate(prompt)
+
+                    extension = metadata.get("format", "png")
+                    filename = f"{uuid.uuid4()}.{extension}"
+                    url = storage_service.save_image(image_bytes, filename)
+
+                    mime_type_map = {
+                        "png": "image/png",
+                        "jpg": "image/jpeg",
+                        "jpeg": "image/jpeg",
+                        "webp": "image/webp",
+                    }
+                    mime_type = mime_type_map.get(extension, "image/png")
+
+                    image_asset = Asset(
+                        type="image",
+                        name=f"Image générée: {scene.title}",
+                        filename=filename,
+                        url=url,
+                        file_size=len(image_bytes),
+                        mime_type=mime_type,
+                        metadata=metadata,
+                        uploaded_by=user,
+                        is_public=True,
+                    )
+                    image_asset.save()
+                    scene.image_id = image_asset
+
+                except Exception as e:
+                    # Si la génération échoue, on continue sans l'image
+                    pass
+
+            # Générer du TTS (narration) si demandé
+            if input.auto_generate_sound and not scene.sound_id:
+                try:
+                    from assets.services import (
+                        SoundGenerationService,
+                        AssetStorageService,
+                    )
+                    from assets.models import Asset
+                    import uuid
+
+                    sound_service = SoundGenerationService()
+                    storage_service = AssetStorageService()
+
+                    # Utiliser le texte de la scène pour générer un son TTS (narration)
+                    audio_bytes, metadata = sound_service.generate_text_to_speech(
+                        scene.text, lang="fr"
+                    )
+
+                    filename = f"{uuid.uuid4()}.mp3"
+                    url = storage_service.save_audio(audio_bytes, filename)
+
+                    sound_asset = Asset(
+                        type="sound",
+                        name=f"Narration générée: {scene.title}",
+                        filename=filename,
+                        url=url,
+                        file_size=len(audio_bytes),
+                        mime_type="audio/mpeg",
+                        metadata=metadata,
+                        uploaded_by=user,
+                        is_public=True,
+                    )
+                    sound_asset.save()
+                    scene.sound_id = sound_asset
+
+                except Exception as e:
+                    # Si la génération échoue, on continue sans le son
+                    pass
+
+            # Générer de la musique d'ambiance si demandé
+            if input.auto_generate_music and not scene.music_id:
+                try:
+                    from assets.services import (
+                        SoundGenerationService,
+                        AssetStorageService,
+                    )
+                    from assets.models import Asset
+                    import uuid
+
+                    sound_service = SoundGenerationService()
+                    storage_service = AssetStorageService()
+
+                    # Créer une description d'ambiance basée sur le texte de la scène
+                    music_description = f"musique d'ambiance pour: {scene.text[:200]}"
+
+                    # Générer de la musique d'ambiance (durée par défaut: 30 secondes)
+                    audio_bytes, metadata = sound_service.generate_ambient_music(
+                        music_description, duration=30
+                    )
+
+                    filename = f"{uuid.uuid4()}.wav"
+                    url = storage_service.save_audio(audio_bytes, filename)
+
+                    music_asset = Asset(
+                        type="sound",
+                        name=f"Musique d'ambiance générée: {scene.title}",
+                        filename=filename,
+                        url=url,
+                        file_size=len(audio_bytes),
+                        mime_type="audio/wav",
+                        metadata=metadata,
+                        uploaded_by=user,
+                        is_public=True,
+                    )
+                    music_asset.save()
+                    scene.music_id = music_asset
+
+                except Exception as e:
+                    # Si la génération échoue, on continue sans la musique
+                    pass
+
             scene.save()
 
             return UpdateScene(
@@ -619,10 +752,31 @@ class DeleteScenario(graphene.Mutation):
             #     )
 
             # Supprimer toutes les scènes et leurs choix associés
+            from assets.schema import delete_asset_with_file
+            from assets.models import Asset
+
             for scene in scenario.scenes:
                 # Supprimer tous les choix de cette scène
                 Choice.objects(from_scene_id=scene.id).delete()
                 Choice.objects(to_scene_id=scene.id).delete()
+
+                # Supprimer les assets associés (image, sound, music) et leurs fichiers
+                assets_to_delete = []
+                if scene.image_id:
+                    assets_to_delete.append(scene.image_id)
+                if scene.sound_id:
+                    assets_to_delete.append(scene.sound_id)
+                if scene.music_id:
+                    assets_to_delete.append(scene.music_id)
+
+                # Supprimer chaque asset (fichier + base de données)
+                for asset_ref in assets_to_delete:
+                    if asset_ref:
+                        # Récupérer l'asset complet depuis la base
+                        asset = Asset.objects(id=asset_ref.id).first()
+                        if asset:
+                            delete_asset_with_file(asset)
+
                 scene.delete()
 
             # Supprimer le scénario
@@ -667,6 +821,26 @@ class DeleteScene(graphene.Mutation):
             # Supprimer tous les choix qui pointent vers ou depuis cette scène
             Choice.objects(from_scene_id=scene.id).delete()
             Choice.objects(to_scene_id=scene.id).delete()
+
+            # Supprimer les assets associés (image, sound, music) et leurs fichiers
+            from assets.schema import delete_asset_with_file
+            from assets.models import Asset
+
+            assets_to_delete = []
+            if scene.image_id:
+                assets_to_delete.append(scene.image_id)
+            if scene.sound_id:
+                assets_to_delete.append(scene.sound_id)
+            if scene.music_id:
+                assets_to_delete.append(scene.music_id)
+
+            # Supprimer chaque asset (fichier + base de données)
+            for asset_ref in assets_to_delete:
+                if asset_ref:
+                    # Récupérer l'asset complet depuis la base
+                    asset = Asset.objects(id=asset_ref.id).first()
+                    if asset:
+                        delete_asset_with_file(asset)
 
             # Retirer la scène de la liste des scènes du scénario
             if scene in scenario.scenes:
@@ -724,6 +898,7 @@ class DeleteChoice(graphene.Mutation):
         except Exception as e:
             return DeleteChoice(success=False, message=str(e))
 
+
 class DeleteChoices(graphene.Mutation):
     """
     Mutation pour supprimer plusieurs choix
@@ -762,7 +937,9 @@ class DeleteChoices(graphene.Mutation):
             if deleted_count == 0:
                 return DeleteChoices(success=False, message="Aucun choix supprimé")
 
-            return DeleteChoices(success=True, message=f"{deleted_count} choix supprimés avec succès")
+            return DeleteChoices(
+                success=True, message=f"{deleted_count} choix supprimés avec succès"
+            )
         except Exception as e:
             return DeleteChoices(success=False, message=str(e))
 
@@ -835,6 +1012,7 @@ class Mutation(graphene.ObjectType):
     update_choice = UpdateChoice.Field()
     delete_choice = DeleteChoice.Field()
     deleteChoices = DeleteChoices.Field()
+
 
 def get_user_from_context(info):
     auth = info.context.META.get("HTTP_AUTHORIZATION", "")

@@ -43,7 +43,9 @@ class ImageGenerationService:
         self.default_model = config(
             "HF_IMAGE_MODEL", default="stabilityai/stable-diffusion-xl-base-1.0"
         )
-        self.base_url = "https://api-inference.huggingface.co/models"
+        # URL de l'API Hugging Face (nouvelle API 2024)
+        # Structure: https://router.huggingface.co/hf-inference/models/{model}
+        self.base_url = "https://router.huggingface.co/hf-inference/models"
 
     def generate(
         self, prompt: str, negative_prompt: Optional[str] = None
@@ -105,9 +107,18 @@ class ImageGenerationService:
                     "Le modèle est en cours de chargement. Veuillez réessayer dans quelques instants."
                 )
             else:
-                error_msg = response.json().get(
-                    "error", "Erreur lors de la génération de l'image"
-                )
+                # Essayer de parser le JSON, sinon utiliser le texte brut
+                try:
+                    error_data = response.json()
+                    error_msg = error_data.get(
+                        "error",
+                        error_data.get(
+                            "message", "Erreur lors de la génération de l'image"
+                        ),
+                    )
+                except (ValueError, json.JSONDecodeError):
+                    # Si ce n'est pas du JSON, utiliser le texte brut ou le status code
+                    error_msg = response.text or f"Erreur HTTP {response.status_code}"
                 raise Exception(f"Erreur API Hugging Face: {error_msg}")
 
         except requests.exceptions.Timeout:
@@ -354,3 +365,25 @@ class AssetStorageService:
             f.write(audio_bytes)
 
         return f"/media/assets/{filename}"
+
+    def delete_file(self, filename: str) -> bool:
+        """
+        Supprime un fichier du système de fichiers
+
+        Args:
+            filename: Nom du fichier à supprimer
+
+        Returns:
+            True si le fichier a été supprimé, False s'il n'existait pas
+        """
+        filepath = os.path.join(self.media_root, filename)
+
+        if os.path.exists(filepath):
+            try:
+                os.remove(filepath)
+                return True
+            except OSError as e:
+                # Log l'erreur mais ne pas faire échouer la suppression
+                print(f"Erreur lors de la suppression du fichier {filepath}: {e}")
+                return False
+        return False

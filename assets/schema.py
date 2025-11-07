@@ -175,9 +175,10 @@ class DeleteAsset(graphene.Mutation):
             if not asset:
                 return DeleteAsset(success=False, message="Asset non trouvé")
 
-            asset.delete()
+            # Supprimer le fichier physique et l'asset de la base
+            success, message = delete_asset_with_file(asset)
 
-            return DeleteAsset(success=True, message="Asset supprimé avec succès")
+            return DeleteAsset(success=success, message=message)
         except Exception as e:
             return DeleteAsset(success=False, message=str(e))
 
@@ -461,3 +462,30 @@ def get_user_from_context(info):
         except Exception:
             return None
     return None
+
+
+def delete_asset_with_file(asset):
+    """
+    Supprime un asset de la base de données et son fichier physique
+
+    Args:
+        asset: Instance d'Asset à supprimer
+
+    Returns:
+        tuple: (success: bool, message: str)
+    """
+    try:
+        # Supprimer le fichier physique si l'asset a un filename
+        if asset and asset.filename:
+            from .services import AssetStorageService
+
+            storage_service = AssetStorageService()
+            storage_service.delete_file(asset.filename)
+
+        # Supprimer l'asset de la base de données
+        if asset:
+            asset.delete()
+
+        return True, "Asset supprimé avec succès"
+    except Exception as e:
+        return False, f"Erreur lors de la suppression de l'asset: {str(e)}"
