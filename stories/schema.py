@@ -619,10 +619,31 @@ class DeleteScenario(graphene.Mutation):
             #     )
 
             # Supprimer toutes les scènes et leurs choix associés
+            from assets.schema import delete_asset_with_file
+            from assets.models import Asset
+            
             for scene in scenario.scenes:
                 # Supprimer tous les choix de cette scène
                 Choice.objects(from_scene_id=scene.id).delete()
                 Choice.objects(to_scene_id=scene.id).delete()
+                
+                # Supprimer les assets associés (image, sound, music) et leurs fichiers
+                assets_to_delete = []
+                if scene.image_id:
+                    assets_to_delete.append(scene.image_id)
+                if scene.sound_id:
+                    assets_to_delete.append(scene.sound_id)
+                if scene.music_id:
+                    assets_to_delete.append(scene.music_id)
+                
+                # Supprimer chaque asset (fichier + base de données)
+                for asset_ref in assets_to_delete:
+                    if asset_ref:
+                        # Récupérer l'asset complet depuis la base
+                        asset = Asset.objects(id=asset_ref.id).first()
+                        if asset:
+                            delete_asset_with_file(asset)
+                
                 scene.delete()
 
             # Supprimer le scénario
@@ -667,6 +688,26 @@ class DeleteScene(graphene.Mutation):
             # Supprimer tous les choix qui pointent vers ou depuis cette scène
             Choice.objects(from_scene_id=scene.id).delete()
             Choice.objects(to_scene_id=scene.id).delete()
+
+            # Supprimer les assets associés (image, sound, music) et leurs fichiers
+            from assets.schema import delete_asset_with_file
+            from assets.models import Asset
+            
+            assets_to_delete = []
+            if scene.image_id:
+                assets_to_delete.append(scene.image_id)
+            if scene.sound_id:
+                assets_to_delete.append(scene.sound_id)
+            if scene.music_id:
+                assets_to_delete.append(scene.music_id)
+            
+            # Supprimer chaque asset (fichier + base de données)
+            for asset_ref in assets_to_delete:
+                if asset_ref:
+                    # Récupérer l'asset complet depuis la base
+                    asset = Asset.objects(id=asset_ref.id).first()
+                    if asset:
+                        delete_asset_with_file(asset)
 
             # Retirer la scène de la liste des scènes du scénario
             if scene in scenario.scenes:
