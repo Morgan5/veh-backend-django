@@ -21,6 +21,7 @@ from django.views.decorators.csrf import csrf_exempt
 from graphene_django.views import GraphQLView
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.static import serve
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -28,7 +29,18 @@ urlpatterns = [
     path("graphql/", csrf_exempt(GraphQLView.as_view(graphiql=True))),
 ]
 
-# Serve media files in development
+# Serve media files
+# En développement : servir via Django
+# En production : servir via WhiteNoise ou un service de stockage cloud
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+else:
+    # En production, servir les médias via Django (ou utiliser WhiteNoise/Cloud Storage)
+    urlpatterns += [
+        path(
+            settings.MEDIA_URL.strip("/") + "/<path:path>",
+            serve,
+            {"document_root": settings.MEDIA_ROOT},
+        ),
+    ]

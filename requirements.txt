@@ -16,4 +16,7 @@ Pillow>=10.0.0
 transformers>=4.31.0
 torch>=2.0.0
 scipy>=1.10.0
-numpy>=1.24.0 
+numpy>=1.24.0
+# Serveur WSGI pour la production
+gunicorn>=21.2.0
+whitenoise>=6.6.0 
