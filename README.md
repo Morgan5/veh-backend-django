@@ -81,6 +81,16 @@ python manage.py runserver
 - **GraphiQL Interface** : `http://localhost:8000/graphql/` (interface interactive pour tester l'API)
 - **Collection Postman** : Importer `VEH.postman_collection.json` dans Postman pour tester les endpoints GraphQL
 
+### Authentification
+
+Pour les requêtes authentifiées, inclure le token JWT dans le header :
+
+```
+Authorization: JWT <votre_token_jwt>
+```
+
+Le token est obtenu via la mutation `login` ou `tokenAuth` (fournie par `graphql-jwt`).
+
 ## 📱 Applications Django
 
 ### 1. **users** - Gestion des utilisateurs
@@ -107,7 +117,8 @@ python manage.py runserver
 - Métadonnées des fichiers
 - **Génération d'assets via IA** ✨
   - Images générées via Hugging Face Stable Diffusion
-  - Sons générés via gTTS (Text-to-Speech) et MusicGen pour la musique d'ambiance
+  - Sons générés via gTTS (Text-to-Speech) pour la narration (stocké dans `sound_id`)
+  - Musique d'ambiance générée via MusicGen (stockée dans `music_id`, séparée du TTS)
   - Génération automatique lors de la création de scènes (via les flags `auto_generate_image`, `auto_generate_sound`, `auto_generate_music`)
   - Mutation `generate_asset` disponible pour générer manuellement des assets
 
@@ -123,7 +134,8 @@ Le système supporte 3 types de génération :
 
 ## 🔒 Sécurité
 
-- **Authentification JWT** : Tokens sécurisés
+- **Authentification JWT** : Tokens sécurisés signés avec `SECRET_KEY`
+- **Header d'authentification** : Utiliser le préfixe `JWT ` dans le header `Authorization` (ex: `Authorization: JWT <token>`)
 - **Autorisations** : Contrôle d'accès par rôle
 - **Validation** : Validation des données GraphQL
 - **CORS** : Configuration sécurisée pour React
@@ -137,7 +149,12 @@ DEBUG=False
 SECRET_KEY=your-production-secret-key
 ALLOWED_HOSTS=your-domain.com
 MONGODB_URI=your-production-mongodb-uri
+MONGODB_DB_NAME=your-database-name
+JWT_EXPIRATION_DELTA=3600
+CORS_ALLOWED_ORIGINS=https://your-frontend-domain.com
 ```
+
+> **Note** : `SECRET_KEY` est utilisé à la fois pour Django et pour signer les tokens JWT. Les variables `JWT_SECRET_KEY` et `JWT_ALGORITHM` présentes dans `env.example` ne sont pas utilisées par le code actuel.
 
 ### Commandes de déploiement
 
@@ -173,7 +190,8 @@ pip install -r requirements.txt
 
 - Le système détecte automatiquement si les bibliothèques ML (`transformers`, `torch`) sont installées
 - Si non, la génération musicale est désactivée avec un message d'erreur clair
-- Optionnel : Configurez le modèle MusicGen avec `MUSICGEN_MODEL` (défaut: `facebook/musicgen-small`)
+- Optionnel : Configurez le modèle MusicGen avec `MUSICGEN_MODEL` dans votre `.env` (défaut: `facebook/musicgen-small`)
+- **Note** : La durée de génération est limitée à 15 secondes maximum pour optimiser les performances
 
 ### Premier démarrage - Téléchargement des modèles
 
@@ -188,8 +206,9 @@ Lors de la **première** génération de musique :
 
 **Génération musicale** :
 
-- **Avec GPU** : ~1-2 minutes pour 30s de musique
-- **Avec CPU** : ~5-10 minutes pour 30s de musique
+- **Durée par défaut** : 15 secondes (limité à 15s maximum pour des raisons de performance)
+- **Avec GPU** : ~1-2 minutes pour 15s de musique
+- **Avec CPU** : ~5-10 minutes pour 15s de musique
 - **Recommandation** : Utiliser GPU ou éviter cette fonctionnalité en production
 
 **Autres générations** :
